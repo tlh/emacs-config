@@ -6,11 +6,13 @@
 ;; recentf
 
 (recentf-mode 1)
+
 (setq recentf-save-file (etc-path "recentf"))
 
 ;; saveplace
 
 (require 'saveplace)
+
 (setq save-place-file (etc-path "saved-places"))
 
 ;; whitespace-mode
@@ -53,11 +55,13 @@
 ;; windmove
 
 (require 'windmove)
+
 (setq windmove-wrap-around t)
 
 ;; imenu
 
 (require 'imenu)
+
 (setq imenu-auto-rescan t)
 
 ;; ido
@@ -72,8 +76,8 @@
         ido-save-directory-list-file (etc-path "ido.last")))
 
 (defun ido-imenu ()
-  "Queries with `ido-completing-read' a symbol in the buffer's
-imenu index, then jumps to that symbol's location."
+  "Query with `ido-completing-read' a symbol in the buffer's
+imenu index, then jump to that symbol's location."
   (interactive)
   (goto-char
    (let ((lst (nreverse (flatten-assoc-tree (imenu--make-index-alist) 'imenu--subalist-p))))
@@ -81,7 +85,7 @@ imenu index, then jumps to that symbol's location."
 
 (defun ido-cache (pred &optional recalc)
   "Create a cache of symbols from `obarray' named after the
-predicate used to identify them."
+predicate PRED used to identify them."
   (let ((cache (intern (concat "ido-cache-" (symbol-name pred)))))
     (when (or recalc (not (boundp cache)))
       (set cache nil)
@@ -91,7 +95,8 @@ predicate used to identify them."
     (symbol-value cache)))
 
 (defun ido-recalculate-all-caches ()
-  "Recalculates the ido-caches of functions, commands and variables to include recent changes."
+  "Recalculate the `ido-cache' of `functionp', `commandp' and
+`boundp'."
   (interactive)
   (ido-cache 'commandp  t)
   (ido-cache 'functionp t)
@@ -99,13 +104,13 @@ predicate used to identify them."
   t)
 
 (defun ido-execute-extended-command ()
-  "ido replacement for execute-extended-command."
+  "ido replacement for `execute-extended-command'."
   (interactive)
   (call-interactively
    (intern (ido-completing-read "M-x " (ido-cache 'commandp)))))
 
 (defun ido-describe-function (&optional at-point)
-  "ido replacement for describe-function."
+  "ido replacement for `describe-function'."
   (interactive "P")
   (describe-function
    (intern
@@ -123,7 +128,7 @@ predicate used to identify them."
   (find-function (intern (ido-completing-read "Function: " (ido-cache 'functionp)))))
 
 (defun ido-find-documentation-for-command ()
-  "ido replacement for find-documentation-for-command."
+  "ido replacement for `find-documentation-for-command'."
   (interactive)
   (Info-goto-emacs-command-node
    (intern
@@ -131,7 +136,7 @@ predicate used to identify them."
      "Find documentation for command: " (ido-cache 'commandp)))))
 
 (defun ido-describe-variable (&optional at-point)
-  "ido replacement for describe-variable."
+  "ido replacement for `describe-variable'."
   (interactive "P")
   (describe-variable
    (intern
@@ -158,6 +163,7 @@ predicate used to identify them."
 ;; dired
 
 (require 'dired)
+
 (fill-keymap dired-mode-map "C-c w" 'wdired-change-to-wdired-mode)
 
 ;; eshell
@@ -166,37 +172,44 @@ predicate used to identify them."
 
 (defpathfn eshell-path (etc-path "eshell/"))
 
-(setq eshell-directory-name (eshell-path)
-      eshell-aliases-file (eshell-path "alias")
-      eshell-history-file-name (eshell-path "history")
+(setq eshell-directory-name          (eshell-path)
+      eshell-aliases-file            (eshell-path "alias")
+      eshell-history-file-name       (eshell-path "history")
       eshell-last-dir-ring-file-name (eshell-path "lastdir")
-      eshell-ls-use-in-dired t)
+      eshell-ls-use-in-dired         t)
 
 ;; workgroups
 
 (add-path (elisp-path "workgroups/"))
+
 (require 'workgroups)
+
 (add-hook 'after-init-hook 'workgroups-load-configs)
+
 (setq workgroups-configs-file (etc-path "workgroups-configs"))
 
 ;; recs
 
 (add-path (elisp-path "recs/"))
+
 (require 'recs)
+
 (recs-mode t)
-(setq recs-suggestion-interval nil
-      recs-ding-on-suggestion nil
-      recs-suggestion-window t
-      recs-suppress-suggestion nil
-      recs-window-select t
-      recs-log-suggestions t
-      recs-log-file (etc-path "recs-log"))
+
+(setq recs-suggestion-interval   nil
+      recs-ding-on-suggestion    nil
+      recs-suggestion-window     t
+      recs-suppress-suggestion   nil
+      recs-window-select         t
+      recs-log-suggestions       t
+      recs-log-file              (etc-path "recs-log"))
 
 (add-hook 'recs-hook 'yell-at-me)
 
 ;; uniquify
 
 (require 'uniquify)
+
 (setq uniquify-buffer-name-style 'reverse
       uniquify-separator "|"
       uniquify-after-kill-buffer-p t
@@ -205,17 +218,21 @@ predicate used to identify them."
 ;; acct
 
 (add-path (elisp-path "acctdb/"))
+
 (require 'acctdb)
+
 (setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
 
 ;; tls
 
 (require 'tls)
+
 (setq tls-program '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof"))
 
 ;; erc
 
 (require 'erc)
+
 (require 'tlh-erc)
 
 (defun erc-freenode-ssl-connect ()
@@ -255,16 +272,19 @@ predicate used to identify them."
 ;; tramp
 
 (require 'tramp)
+
 (setq tramp-persistency-file-name (etc-path "tramp"))
 
 ;; gnus
 
 (setq gnus-init-file (elisp-path "tlh-gnus.el"))
+
 ;; (setq gnus-startup-file (elisp-path "newsrc.el"))
 
 ;; midnight-mode
 
 (require 'midnight)
+
 (midnight-delay-set 'midnight-delay "7:00AM")
 
 ;; ansi-term
@@ -275,21 +295,28 @@ predicate used to identify them."
 ;; paredit
 
 (add-path (site-path "paredit"))
+
 (autoload 'paredit-mode "paredit" nil t)
+
 ;; (add-hook 'lisp-mode-hook (lambda () (paredit-mode t)))
 ;; (add-hook 'clojure-mode-hook (lambda () (paredit-mode t)))
 
 ;; js2-mode
 
 (add-path (site-path "js2-mode"))
+
 (autoload 'js2-mode "js2" nil t)
+
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 
 ;; clojure-mode
 
 (add-path (site-path "clojure-mode"))
+
 (autoload 'clojure-mode "clojure-mode" nil t)
+
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+
 (add-hook 'clojure-mode-hook
           'coding-hook
           'unicode-lambdas
@@ -318,6 +345,7 @@ predicate used to identify them."
 ;; magit
 
 (add-path (site-path "magit"))
+
 (autoload 'magit-status "magit" nil t)
 
 ;; color-theme
@@ -334,20 +362,26 @@ predicate used to identify them."
 ;; jd-el
 
 (add-path (site-path "jd-el"))
+
 (autoload 'rainbow-mode "rainbow-mode" nil t)
+
 (autoload 'google-maps "google-maps" nil t)
 
 ;; url vars
 
 (defvar url-regexp "https?://")
+
 (defvar google-search-string "http://www.google.com/search?q=")
+
 (defvar google-lucky-search-string "http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=")
 
 ;; w3m
 
 (add-path (site-path "w3m"))
+
 (require 'w3m-load)
 ;; (require 'mime-w3m)
+
 (setq w3m-key-binding 'info
       w3m-home-page "about:"
       w3m-default-directory (etc-path "w3m/")
@@ -400,22 +434,30 @@ predicate used to identify them."
 ;; google-define
 
 (add-path (site-path "google-define"))
+
 (require 'google-define)
 
 ;; yaoddmuse
 
 (add-path (site-path "yaoddmuse"))
+
 (require 'yaoddmuse)
+
 (setq yaoddmuse-username "tlh"
       yaoddmuse-directory (etc-path "yaoddmuse/"))
 
 ;; emms
 
 (add-path (site-path "emms/lisp"))
+
 (require 'emms-setup)
+
 (require 'emms-player-mplayer)
+
 (emms-standard)
+
 (add-to-list 'emms-player-list 'emms-player-mplayer)
+
 (setq emms-source-file-default-directory (home-path "Music/iTunes/iTunes Media/Music/")
       emms-repeat-playlist t
       emms-playlist-default-major-mode 'emms-playlist-mode
