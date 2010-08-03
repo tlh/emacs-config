@@ -38,6 +38,9 @@
 
 ;; emacs-lisp-mode
 
+(setq eval-expression-print-level   10
+      eval-expression-print-length  20)
+
 (add-hooks 'emacs-lisp-mode-hook
            'turn-on-eldoc-mode
            'remove-elc-on-save
@@ -80,7 +83,10 @@
 imenu index, then jump to that symbol's location."
   (interactive)
   (goto-char
-   (let ((lst (nreverse (flatten-assoc-tree (imenu--make-index-alist) 'imenu--subalist-p))))
+   (let ((lst (nreverse
+               (flatten-assoc-tree
+                (imenu--make-index-alist)
+                'imenu--subalist-p))))
      (access (ido-completing-read "Symbol: " (mapcar 'car lst)) lst))))
 
 (defun ido-cache (pred &optional recalc)
@@ -166,17 +172,23 @@ predicate PRED used to identify them."
 
 (fill-keymap dired-mode-map "C-c w" 'wdired-change-to-wdired-mode)
 
+(setq directory-free-space-program        "df"
+      directory-free-space-args           "-h"
+      dired-auto-revert-buffer            t
+      wdired-allow-to-change-permissions  t)
+
 ;; eshell
 
 (require 'eshell)
 
 (defpathfn eshell-path (etc-path "eshell/"))
 
-(setq eshell-directory-name          (eshell-path)
-      eshell-aliases-file            (eshell-path "alias")
-      eshell-history-file-name       (eshell-path "history")
-      eshell-last-dir-ring-file-name (eshell-path "lastdir")
-      eshell-ls-use-in-dired         t)
+(setq eshell-directory-name              (eshell-path)
+      eshell-aliases-file                (eshell-path "alias")
+      eshell-history-file-name           (eshell-path "history")
+      eshell-last-dir-ring-file-name     (eshell-path "lastdir")
+      eshell-ls-use-in-dired             t
+      eshell-scroll-show-maximum-output  nil)
 
 ;; workgroups
 
@@ -273,12 +285,12 @@ predicate PRED used to identify them."
 
 (require 'tramp)
 
-(setq tramp-persistency-file-name (etc-path "tramp"))
+(setq tramp-persistency-file-name (etc-path "tramp/tramp-persistence")
+      tramp-auto-save-directory (etc-path "tramp/"))
 
 ;; gnus
 
 (setq gnus-init-file (elisp-path "tlh-gnus.el"))
-
 ;; (setq gnus-startup-file (elisp-path "newsrc.el"))
 
 ;; midnight-mode
