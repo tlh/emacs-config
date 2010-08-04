@@ -13,7 +13,7 @@
      (expand-file-name (concat ,path (or sub "")))))
 
 (defpathfn home-path    home-dir)
-(defpathfn emacs-path   (home-path  ".emacs.d/"))
+(defpathfn emacs-path   (home-path  "emacs/"))
 (defpathfn elisp-path   (emacs-path "elisp/"))
 (defpathfn init-path    (elisp-path "init/"))
 (defpathfn private-path (elisp-path "private/"))

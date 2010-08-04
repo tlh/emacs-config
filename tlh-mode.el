@@ -91,7 +91,7 @@ imenu index, then jump to that symbol's location."
 
 (defun ido-cache (pred &optional recalc)
   "Create a cache of symbols from `obarray' named after the
-predicate PRED used to identify them."
+predicate PRED used to filter them."
   (let ((cache (intern (concat "ido-cache-" (symbol-name pred)))))
     (when (or recalc (not (boundp cache)))
       (set cache nil)
@@ -229,11 +229,10 @@ predicate PRED used to identify them."
 
 ;; acct
 
+(require 'epa-file)
 (add-path (elisp-path "acctdb/"))
-
 (require 'acctdb)
-
-(setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
+(setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
 
 ;; tls
 
@@ -428,7 +427,7 @@ predicate PRED used to identify them."
   (browse-url-find (lambda () (search-forward-regexp url-regexp)) num))
 
 (defun google-search (terms)
-  (interactive)
+  (interactive (list (read-from-minibuffer "Query: ")))
   (tlh-google-search nil terms))
 
 (defun google-lucky-search (terms)
