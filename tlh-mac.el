@@ -6,7 +6,9 @@
       mac-option-modifier 'super
       browse-url-browser-function 'browse-url-default-macosx-browser
       ding-sound "/System/Library/Sounds/Pop.aiff"
-      yell-sound "/System/Library/Sounds/Basso.aiff")
+      yell-sound "/System/Library/Sounds/Basso.aiff"
+      fortune-dir "/opt/local/share/games/fortune/"
+      fortune-file "/opt/local/share/games/fortune/")
 
 (defun play-sound (filename)
   (call-process "afplay" nil 0 nil filename))

@@ -38,7 +38,7 @@
 
 ;; emacs-lisp-mode
 
-(setq eval-expression-print-level   10
+(setq eval-expression-print-level   20
       eval-expression-print-length  20)
 
 (add-hooks 'emacs-lisp-mode-hook

@@ -282,6 +282,7 @@
              "M-<f5>"           'ucs-insert
              "C-M-<f1>"         'view-emacs-FAQ
              "C-M-<f2>"         'describe-copying
+             "C-M-<f3>"         'fortune
 
              ;; emms
 
