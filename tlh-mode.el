@@ -232,7 +232,8 @@ predicate PRED used to filter them."
 (require 'epa-file)
 (add-path (elisp-path "acctdb/"))
 (require 'acctdb)
-(setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
+;; (setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
+(setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
 
 ;; tls
 

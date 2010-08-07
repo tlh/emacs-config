@@ -4,6 +4,7 @@
   "C-e"              'eval-buffer
   "C-r"              'revert-buffer
   "C-c"              'cleanup-buffer
+  "C-u"              'untabify-buffer
   "C-b"              'bury-buffer
   "C-z"              'inhibit-backup-of-buffer
   )
@@ -73,6 +74,7 @@
   "C-c"              'clojure-mode
   "C-e"              'emacs-lisp-mode
   "C-f"              'flyspell-mode
+  "C-l"              'lisp-mode
   "C-m"              'magit-status
   "C-o"              'org-mode
   "C-p"              'paredit-mode
@@ -152,9 +154,14 @@
 
 ;; fill-keymaps
 
+(fill-keymap isearch-mode-map
+             "M-h"              isearch-help-map
+             "C-h"              'isearch-delete-char
+             )
+
 (fill-keymap lisp-mode-shared-map
              "M-."              'find-function-at-point
-             "C-c C-e"          'eval-last-sexp
+             "C-c C-e"          'eval-lat-sexp
              "C-c e"            'eval-and-replace
              "C-c l"            "lambda"
              "C-\\"             'lisp-complete-symbol
