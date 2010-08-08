@@ -13,7 +13,7 @@
                 ?r (init-path  "tlh-registers.el")
                 ?s (elisp-path "recs/recs.el")
                 ?t (elisp-path "color-themes/color-theme-thunk1.el")
-                ?u (elisp-path "futil/futil.el")
+                ?u (elisp-path "tlh-util/tlh-util.el")
                 ?w (elisp-path "workgroups/workgroups.el"))
 
 (provide 'tlh-registers)

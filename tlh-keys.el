@@ -30,6 +30,7 @@
   "S-C-r"            'workgroups-restore-config
   "S-C-d"            'workgroups-delete-config
   "C-u"              'workgroups-update-config
+  "C-v"              'workgroups-revert-config
   "C-l"              'workgroups-load-configs
   "C-p"              'workgroups-prev-config
   "C-n"              'workgroups-next-config
@@ -73,7 +74,7 @@
   "C-a"              'auto-fill-mode
   "C-c"              'clojure-mode
   "C-e"              'emacs-lisp-mode
-  "C-f"              'flyspell-mode
+  "C-f"              'fundamental-mode
   "C-l"              'lisp-mode
   "C-m"              'magit-status
   "C-o"              'org-mode
@@ -83,13 +84,22 @@
   "C-t"              'text-mode
   "C-u"              'toggle-truncate-lines
   "C-w"              'whitespace-mode
+  "C-y"              'flyspell-mode
   "C-z"              'zone
   )
 
 (defkeymap launch-map
-  "C-d"              'dunnet
   "C-g"              'gnus
   "C-w"              'w3m
+  )
+
+(defkeymap games-map
+  "C-d"              'doctor
+  "C-l"              'life
+  "C-p"              'pong
+  "C-s"              'solitaire
+  "C-t"              'tetris
+  "C-u"              'dunnet
   )
 
 (defkeymap erc-map
@@ -139,7 +149,7 @@
   "C-c"              block-map
   "C-d"              directory-map
   "C-f"              file-map
-  "C-g"              workgroups-map
+  "C-g"              games-map
   "C-h"              help-map
   "C-i"              erc-map
   "C-j"              browse-map
@@ -149,10 +159,15 @@
   "C-s"              shell-map
   "C-u"              w3m-map
   "C-v"              emms-map
+  "C-x"              workgroups-map
   "C-y"              yaoddmuse-map
   )
 
 ;; fill-keymaps
+
+(fill-keymap text-mode-map
+             "C-M-q"            'unfill-paragraph
+             )
 
 (fill-keymap isearch-mode-map
              "M-h"              isearch-help-map
@@ -161,7 +176,7 @@
 
 (fill-keymap lisp-mode-shared-map
              "M-."              'find-function-at-point
-             "C-c C-e"          'eval-lat-sexp
+             "C-c C-e"          'eval-last-sexp
              "C-c e"            'eval-and-replace
              "C-c l"            "lambda"
              "C-\\"             'lisp-complete-symbol
@@ -188,6 +203,7 @@
              "p"                'message-point
              "C-u"              'untabify
              "\\"               'align-regexp
+             ;; "C-c"              'execute-extended-command
              "C-m"              'ido-execute-extended-command
              "C-i"              'ido-imenu
              "7"                'ido-recalculate-all-caches
@@ -262,10 +278,14 @@
              "C-s-y"            'scroll-right
              "C-s-u"            'scroll-up
              "C-s-i"            'scroll-down
-             "C-s-<up>"         (cmd (enlarge-window 1))
-             "C-s-<down>"       (cmd (enlarge-window -1))
-             "C-s-<left>"       (cmd (shrink-window-horizontally 1))
-             "C-s-<right>"      (cmd (enlarge-window-horizontally 1))
+             "C-S-s-n"          'inc-window-height
+             "C-S-s-p"          'dec-window-height
+             "C-S-s-f"          'inc-window-width
+             "C-S-s-b"          'dec-window-width
+             "C-s-<up>"         'inc-window-height
+             "C-s-<down>"       'dec-window-height
+             "C-s-<right>"      'inc-window-width
+             "C-s-<left>"       'dec-window-width
 
              ;; workgroups
 

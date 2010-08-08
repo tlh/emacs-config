@@ -26,9 +26,9 @@
 (defun add-paths (&rest paths)
   (mapc 'add-path paths))
 
-(add-paths (elisp-path "futil/") (init-path) (private-path))
+(add-paths (elisp-path "tlh-util/") (init-path) (private-path))
 
-(mapc 'require '(futil
+(mapc 'require '(tlh-util
                  tlh-init
                  tlh-mode
                  tlh-alias

@@ -27,12 +27,14 @@
       truncate-partial-width-windows   nil
       x-select-enable-clipboard        t
       pager-increment                  5
-      help-window-select               nil)
+      help-window-select               nil
+      )
 
 (add-to-list 'Info-default-directory-list (etc-path "info"))
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines nil)
 (global-font-lock-mode t)
+(global-auto-revert-mode 1)
 (auto-compression-mode t)
 (auto-image-file-mode t)
 (show-paren-mode -1)

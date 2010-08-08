@@ -1,18 +1,17 @@
 ;; comint
 
 (setq comint-scroll-show-maximum-output nil
-      comint-scroll-to-bottom-on-input  nil)
+      comint-scroll-to-bottom-on-input  nil
+      comint-prompt-read-only           t)
 
 ;; recentf
 
 (recentf-mode 1)
-
 (setq recentf-save-file (etc-path "recentf"))
 
 ;; saveplace
 
 (require 'saveplace)
-
 (setq save-place-file (etc-path "saved-places"))
 
 ;; whitespace-mode
@@ -58,19 +57,25 @@
 ;; windmove
 
 (require 'windmove)
-
 (setq windmove-wrap-around t)
+
+;; browse-kill-ring
+
+(add-path (site-path "browse-kill-ring/"))
+(require 'browse-kill-ring)
+(browse-kill-ring-default-keybindings)
+(setq browse-kill-ring-quit-action 'save-and-restore)
 
 ;; imenu
 
 (require 'imenu)
-
 (setq imenu-auto-rescan t)
 
 ;; ido
 
 (when (> emacs-major-version 21)
   (ido-mode t)
+  (ido-everywhere 1)
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
@@ -188,26 +193,22 @@ predicate PRED used to filter them."
       eshell-history-file-name           (eshell-path "history")
       eshell-last-dir-ring-file-name     (eshell-path "lastdir")
       eshell-ls-use-in-dired             t
-      eshell-scroll-show-maximum-output  nil)
+      eshell-save-history-on-exit        t
+      eshell-scroll-show-maximum-output  nil
+      eshell-scroll-to-bottom-on-output  nil
+      eshell-cmpl-cycle-completions      nil)
 
 ;; workgroups
 
 (add-path (elisp-path "workgroups/"))
-
 (require 'workgroups)
-
-(add-hook 'after-init-hook 'workgroups-load-configs)
-
 (setq workgroups-configs-file (etc-path "workgroups-configs"))
 
 ;; recs
 
 (add-path (elisp-path "recs/"))
-
 (require 'recs)
-
 (recs-mode t)
-
 (setq recs-suggestion-interval   nil
       recs-ding-on-suggestion    nil
       recs-suggestion-window     t
@@ -221,7 +222,6 @@ predicate PRED used to filter them."
 ;; uniquify
 
 (require 'uniquify)
-
 (setq uniquify-buffer-name-style 'reverse
       uniquify-separator "|"
       uniquify-after-kill-buffer-p t
@@ -238,13 +238,11 @@ predicate PRED used to filter them."
 ;; tls
 
 (require 'tls)
-
 (setq tls-program '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof"))
 
 ;; erc
 
 (require 'erc)
-
 (require 'tlh-erc)
 
 (defun erc-freenode-ssl-connect ()
@@ -284,7 +282,6 @@ predicate PRED used to filter them."
 ;; tramp
 
 (require 'tramp)
-
 (setq tramp-persistency-file-name (etc-path "tramp/tramp-persistence")
       tramp-auto-save-directory (etc-path "tramp/"))
 
@@ -296,7 +293,6 @@ predicate PRED used to filter them."
 ;; midnight-mode
 
 (require 'midnight)
-
 (midnight-delay-set 'midnight-delay "7:00AM")
 
 ;; ansi-term
@@ -307,7 +303,6 @@ predicate PRED used to filter them."
 ;; paredit
 
 (add-path (site-path "paredit"))
-
 (autoload 'paredit-mode "paredit" nil t)
 
 ;; (add-hook 'lisp-mode-hook (lambda () (paredit-mode t)))
@@ -316,19 +311,14 @@ predicate PRED used to filter them."
 ;; js2-mode
 
 (add-path (site-path "js2-mode"))
-
 (autoload 'js2-mode "js2" nil t)
-
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 
 ;; clojure-mode
 
 (add-path (site-path "clojure-mode"))
-
 (autoload 'clojure-mode "clojure-mode" nil t)
-
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
-
 (add-hook 'clojure-mode-hook
           'coding-hook
           'unicode-lambdas
@@ -341,7 +331,6 @@ predicate PRED used to filter them."
         (clozure ("/usr/bin/dx86cl64"))))
 
 (add-path (site-path "slime"))
-
 (require 'slime-autoloads)
 
 ;; other contribs: slime-references slime-scratch
@@ -349,15 +338,12 @@ predicate PRED used to filter them."
 ;;                 inferior-slime-mode
 
 (slime-setup '(slime-fancy slime-asdf slime-banner))
-
 (when (featurep 'slime-autodoc) (unload-feature 'slime-autodoc))
-
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 
 ;; magit
 
 (add-path (site-path "magit"))
-
 (autoload 'magit-status "magit" nil t)
 
 ;; color-theme
@@ -374,17 +360,13 @@ predicate PRED used to filter them."
 ;; jd-el
 
 (add-path (site-path "jd-el"))
-
 (autoload 'rainbow-mode "rainbow-mode" nil t)
-
 (autoload 'google-maps "google-maps" nil t)
 
 ;; url vars
 
 (defvar url-regexp "https?://")
-
 (defvar google-search-string "http://www.google.com/search?q=")
-
 (defvar google-lucky-search-string "http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=")
 
 ;; w3m
@@ -446,28 +428,21 @@ predicate PRED used to filter them."
 ;; google-define
 
 (add-path (site-path "google-define"))
-
 (require 'google-define)
 
 ;; yaoddmuse
 
 (add-path (site-path "yaoddmuse"))
-
 (require 'yaoddmuse)
-
 (setq yaoddmuse-username "tlh"
       yaoddmuse-directory (etc-path "yaoddmuse/"))
 
 ;; emms
 
 (add-path (site-path "emms/lisp"))
-
 (require 'emms-setup)
-
 (require 'emms-player-mplayer)
-
 (emms-standard)
-
 (add-to-list 'emms-player-list 'emms-player-mplayer)
 
 (setq emms-source-file-default-directory (home-path "Music/iTunes/iTunes Media/Music/")
