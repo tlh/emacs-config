@@ -11,7 +11,7 @@
                 ?m (init-path  "tlh-mode.el")
                 ?n (home-path  "tcvol1/.notes")
                 ?r (init-path  "tlh-registers.el")
-                ?s (elisp-path "recs/recs.el")
+                ?s (elisp-path "recs-mode/recs-mode.el")
                 ?t (elisp-path "color-themes/color-theme-thunk1.el")
                 ?u (elisp-path "tlh-util/tlh-util.el")
                 ?w (elisp-path "workgroups/workgroups.el"))

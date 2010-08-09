@@ -63,7 +63,10 @@
 ;; system specific
 
 (case system-type
-  (darwin (require 'tlh-mac)))
+  ((gnu/linux linux)
+   nil)
+  (darwin
+   (require 'tlh-mac)))
 
 ;; ding
 

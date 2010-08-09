@@ -75,6 +75,7 @@
   "C-c"              'clojure-mode
   "C-e"              'emacs-lisp-mode
   "C-f"              'fundamental-mode
+  "C-k"              'markdown-mode
   "C-l"              'lisp-mode
   "C-m"              'magit-status
   "C-o"              'org-mode
@@ -299,6 +300,16 @@
              "s-p"              'pager-up
              "s-N"              (cmd (pager-down pager-increment))
              "s-P"              (cmd (pager-up   pager-increment))
+
+             ;; transposing
+
+             "C-S-t"            'backward-transpose-chars
+             "M-T"              'backward-transpose-words
+             "s-t"              'transpose-lines
+             "s-T"              'backward-transpose-lines
+             "C-M-S-t"          'backward-transpose-sexps
+             "M-p"              'transpose-paragraphs
+             "M-P"              'backward-transpose-paragraphs
 
              ;; fn keys
 

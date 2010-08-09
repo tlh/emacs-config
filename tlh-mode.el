@@ -61,7 +61,7 @@
 
 ;; browse-kill-ring
 
-(add-path (site-path "browse-kill-ring/"))
+(add-path (site-path "browse-kill-ring"))
 (require 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
 (setq browse-kill-ring-quit-action 'save-and-restore)
@@ -200,14 +200,14 @@ predicate PRED used to filter them."
 
 ;; workgroups
 
-(add-path (elisp-path "workgroups/"))
+(add-path (elisp-path "workgroups"))
 (require 'workgroups)
 (setq workgroups-configs-file (etc-path "workgroups-configs"))
 
-;; recs
+;; recs-mode
 
-(add-path (elisp-path "recs/"))
-(require 'recs)
+(add-path (elisp-path "recs-mode"))
+(require 'recs-mode)
 (recs-mode t)
 (setq recs-suggestion-interval   nil
       recs-ding-on-suggestion    nil
@@ -217,7 +217,7 @@ predicate PRED used to filter them."
       recs-log-suggestions       t
       recs-log-file              (etc-path "recs-log"))
 
-(add-hook 'recs-hook 'yell-at-me)
+(add-hook 'recs-mode-hook 'yell-at-me)
 
 ;; uniquify
 
@@ -230,7 +230,7 @@ predicate PRED used to filter them."
 ;; acct
 
 (require 'epa-file)
-(add-path (elisp-path "acctdb/"))
+(add-path (elisp-path "acctdb"))
 (require 'acctdb)
 ;; (setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
 (setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
@@ -340,6 +340,13 @@ predicate PRED used to filter them."
 (slime-setup '(slime-fancy slime-asdf slime-banner))
 (when (featurep 'slime-autodoc) (unload-feature 'slime-autodoc))
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+
+;; markdown-mode
+
+(add-path (site-path "markdown-mode"))
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\|\\.mdwn\\|\\.mdt" . markdown-mode))
 
 ;; magit
 
