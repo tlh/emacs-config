@@ -2,7 +2,7 @@
 
 (fill-registers 'file
                 ?a (elisp-path "acctdb/acctdb.el")
-                ?c (init-path  "tlh-mac.el")
+                ?c (init-path  "tlh-osx.el")
                 ?e (init-path  "tlh-emacs.el")
                 ?g (init-path  "tlh-gnus.el")
                 ?i (init-path  "tlh-init.el")
@@ -14,6 +14,7 @@
                 ?s (elisp-path "recs-mode/recs-mode.el")
                 ?t (elisp-path "color-themes/color-theme-thunk1.el")
                 ?u (elisp-path "tlh-util/tlh-util.el")
-                ?w (elisp-path "workgroups/workgroups.el"))
+                ?w (elisp-path "workgroups/workgroups.el")
+                ?y (init-path  "tlh-system.el"))
 
 (provide 'tlh-registers)

@@ -24,6 +24,7 @@
 
 (defkeymap workgroups-map
   "C-a"              'workgroups-ido-add-config
+  "C-e"              'workgroups-echo-current-config
   "C-r"              'workgroups-ido-restore-config
   "C-d"              'workgroups-ido-delete-config
   "S-C-a"            'workgroups-add-config
@@ -213,6 +214,7 @@
              "C-e"              'yell-at-me
              "("                'yell-at-me
              ")"                'yell-at-me
+             ;; "C-c"              'save-buffers-kill-terminal
              )
 
 (fill-keymap mode-specific-map
@@ -315,9 +317,12 @@
 
              "<f1>"             'info-apropos
              "<f2>"             'man
-             "<f12>"            'current-info
+             "<f10>"            'mute-volume
+             "<f11>"            'decrease-volume
+             "<f12>"            'increase-volume
              "M-<f1>"           'totd
              "M-<f5>"           'ucs-insert
+             "M-<f12>"          'current-info
              "C-M-<f1>"         'view-emacs-FAQ
              "C-M-<f2>"         'describe-copying
              "C-M-<f3>"         'fortune

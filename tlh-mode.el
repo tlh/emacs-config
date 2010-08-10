@@ -1,3 +1,17 @@
+;;; mode-specifig configs
+
+;; color-theme
+
+(add-path (site-path "color-theme"))
+(setq color-theme-load-all-themes nil)
+(require 'color-theme)
+(color-theme-initialize)
+
+(add-path (elisp-path "color-themes/"))
+(require 'color-theme-thunk1)
+;; (color-theme-thunk1)
+(add-hook 'after-init-hook 'color-theme-thunk1)
+
 ;; comint
 
 (setq comint-scroll-show-maximum-output nil
@@ -184,8 +198,6 @@ predicate PRED used to filter them."
 
 ;; eshell
 
-(require 'eshell)
-
 (defpathfn eshell-path (etc-path "eshell/"))
 
 (setq eshell-directory-name              (eshell-path)
@@ -298,7 +310,9 @@ predicate PRED used to filter them."
 ;; ansi-term
 
 (setq ansi-term-color-vector [unspecified "black" "red3" "lime green" "yellow3"
-                                          "DeepSkyBlue3" "magenta3" "cyan3" "white"])
+                                          "DeepSkyBlue3" "magenta3" "cyan3" "white"]
+      term-default-fg-color  "Grey"
+      term-default-bg-color  "Grey15")
 
 ;; paredit
 
@@ -352,17 +366,6 @@ predicate PRED used to filter them."
 
 (add-path (site-path "magit"))
 (autoload 'magit-status "magit" nil t)
-
-;; color-theme
-
-(when window-system
-  (add-paths (site-path "color-theme")
-             (elisp-path "color-themes/"))
-  (setq color-theme-load-all-themes nil)
-  (require 'color-theme)
-  (require 'color-theme-thunk1)
-  (color-theme-initialize)
-  (color-theme-thunk1))
 
 ;; jd-el
 
@@ -449,6 +452,8 @@ predicate PRED used to filter them."
 (add-path (site-path "emms/lisp"))
 (require 'emms-setup)
 (require 'emms-player-mplayer)
+(require 'emms-volume)
+
 (emms-standard)
 (add-to-list 'emms-player-list 'emms-player-mplayer)
 
@@ -457,4 +462,13 @@ predicate PRED used to filter them."
       emms-playlist-default-major-mode 'emms-playlist-mode
       emms-cache-file (etc-path "emms/cache"))
 
+;; fuzzy
+
+(add-path (site-path "fuzzy"))
+(require 'fuzzy)
+
+;; provide
+
 (provide 'tlh-mode)
+
+;;; tlh-mode.el ends here

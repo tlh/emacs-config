@@ -30,8 +30,9 @@
 
 (mapc 'require '(tlh-util
                  tlh-init
-                 tlh-startup
+                 tlh-system
                  tlh-mode
                  tlh-alias
                  tlh-keys
-                 tlh-registers))
+                 tlh-registers
+                 tlh-startup))
