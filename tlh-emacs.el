@@ -1,3 +1,5 @@
+;;; Main directory structure functions and lib require's
+
 (byte-compile-disable-warning 'cl-functions)
 
 (eval-when-compile
@@ -30,9 +32,12 @@
 
 (mapc 'require '(tlh-util
                  tlh-init
-                 tlh-system
                  tlh-mode
+                 tlh-system
+                 tlh-emms
                  tlh-alias
                  tlh-keys
                  tlh-registers
                  tlh-startup))
+
+;;; end tlh-emacs.el

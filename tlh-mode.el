@@ -12,6 +12,18 @@
 ;; (color-theme-thunk1)
 (add-hook 'after-init-hook 'color-theme-thunk1)
 
+;; tlh-sound
+
+(require 'tlh-sound)
+(setq ring-bell-function 'pretty-ding
+      volume-increment    2)
+
+(add-all-to-list 'quiet-functions
+                 'isearch-abort
+                 'abort-recrusive-edit
+                 'exit-minibuffer
+                 'keyboard-quit)
+
 ;; comint
 
 (setq comint-scroll-show-maximum-output nil
@@ -446,21 +458,6 @@ predicate PRED used to filter them."
 (require 'yaoddmuse)
 (setq yaoddmuse-username "tlh"
       yaoddmuse-directory (etc-path "yaoddmuse/"))
-
-;; emms
-
-(add-path (site-path "emms/lisp"))
-(require 'emms-setup)
-(require 'emms-player-mplayer)
-(require 'emms-volume)
-
-(emms-standard)
-(add-to-list 'emms-player-list 'emms-player-mplayer)
-
-(setq emms-source-file-default-directory (home-path "Music/iTunes/iTunes Media/Music/")
-      emms-repeat-playlist t
-      emms-playlist-default-major-mode 'emms-playlist-mode
-      emms-cache-file (etc-path "emms/cache"))
 
 ;; fuzzy
 

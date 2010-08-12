@@ -51,6 +51,7 @@
 
 (defkeymap emms-map
   "C-SPC"            'emms-start
+  "C-b"              'emms-browser
   "C-r"              'emms-shuffle
   "C-s"              'emms-show
   "C-f"              'emms-play-file
@@ -74,6 +75,7 @@
 (defkeymap mode-map
   "C-a"              'auto-fill-mode
   "C-c"              'clojure-mode
+  "C-d"              'eldoc-mode
   "C-e"              'emacs-lisp-mode
   "C-f"              'fundamental-mode
   "C-k"              'markdown-mode
@@ -317,7 +319,7 @@
 
              "<f1>"             'info-apropos
              "<f2>"             'man
-             "<f10>"            'mute-volume
+             "<f10>"            'toggle-mute-volume
              "<f11>"            'decrease-volume
              "<f12>"            'increase-volume
              "M-<f1>"           'totd
@@ -332,8 +334,10 @@
              "<f7>"             'emms-previous
              "<f8>"             'emms-pause
              "<f9>"             'emms-next
-             "S-<f7>"           'emms-seek-backward
-             "S-<f9>"           'emms-seek-forward
+             "S-<f7>"           'emms-slider-seek-backward
+             "S-<f9>"           'emms-slider-seek-forward
+             "S-M-<f7>"         'emms-seek-backward
+             "S-M-<f9>"         'emms-seek-forward
 
              ;; erc
 

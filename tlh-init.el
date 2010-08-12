@@ -38,7 +38,6 @@
       pager-increment                  5
       help-window-select               nil
       visible-cursor                   nil
-      ring-bell-function              'pretty-ding
       ;; idle-update-delay                0.1
       )
 
@@ -63,13 +62,6 @@
 ;; enable commands
 
 (mapc 'enable-command '(set-goal-column scroll-left))
-
-;; quiet functions
-
-(add-to-list 'quiet-functions 'isearch-abort)
-(add-to-list 'quiet-functions 'abort-recrusive-edit)
-(add-to-list 'quiet-functions 'exit-minibuffer)
-(add-to-list 'quiet-functions 'keyboard-quit)
 
 ;; seed random
 
