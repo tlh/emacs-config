@@ -13,32 +13,34 @@
 
 ;; variable configs
 
-(setq inhibit-splash-screen            t
-      inhibit-startup-message          t
-      user-full-name                   "tlh"
-      user-mail-address                "thunkout@gmail.com"
-      custom-file                      (elisp-path "tlh-custom.el")
-      auto-save-list-file-prefix       (etc-path "auto-save-list/.saves-")
-      backup-directory-alist          `(("." . ,(home-path "tcvol1/emacs-misc/backups/")))
-      yow-file                         (etc-path "yow.lines")
-      junk-file                        (etc-path "junk")
-      initial-scratch-message          (yow-comment)
-      line-number-mode                 t
-      column-number-mode               t
-      size-indication-mode             t
-      font-lock-maximum-decoration     t
-      require-final-newline            t
-      echo-keystrokes                  0.1
-      transient-mark-mode              t
-      color-theme-is-global            t
-      shift-select-mode                nil
-      require-final-newline            t
-      truncate-partial-width-windows   nil
-      x-select-enable-clipboard        t
-      pager-increment                  5
-      help-window-select               nil
-      visible-cursor                   nil
-      ;; idle-update-delay                0.1
+(setq inhibit-splash-screen                     t
+      inhibit-startup-message                   t
+      inhibit-startup-echo-area-message         user-login-name
+      user-full-name                            "tlh"
+      user-mail-address                         "thunkout@gmail.com"
+      custom-file                               (elisp-path "tlh-custom.el")
+      auto-save-list-file-prefix                (etc-path "auto-save-list/.saves-")
+      backup-directory-alist                   `(("." . ,(home-path "tcvol1/emacs-misc/backups/")))
+      yow-file                                  (etc-path "yow.lines")
+      junk-file                                 (etc-path "junk")
+      initial-scratch-message                   (yow-comment)
+      initial-major-mode                        'emacs-lisp-mode
+      line-number-mode                          t
+      column-number-mode                        t
+      size-indication-mode                      t
+      font-lock-maximum-decoration              t
+      require-final-newline                     t
+      echo-keystrokes                           0.1
+      transient-mark-mode                       t
+      color-theme-is-global                     t
+      shift-select-mode                         nil
+      require-final-newline                     t
+      truncate-partial-width-windows            nil
+      x-select-enable-clipboard                 t
+      pager-increment                           5
+      help-window-select                        nil
+      visible-cursor                            nil
+      ;; idle-update-delay                      0.1
       )
 
 ;; buffer-local defaults
@@ -58,6 +60,26 @@
 ;; info path
 
 (add-to-list 'Info-default-directory-list (etc-path "info"))
+
+;; default-frame-alist
+
+;; (set-frame-font "Menlo-12")
+;; (set-frame-font "DejaVu Sans Mono-12")
+
+(setq default-frame-alist
+      `((font                 . "Menlo-12")
+        ;; (font                 . "DejaVu Sans Mono-12")
+        (vertical-scroll-bars . nil)
+        (tool-bar-lines       . 0)
+        (menu-bar-lines       . 0)
+        (background-mode      . dark)
+        (background-color     . "Grey15")
+        (border-color         . "Black")
+        ;; (cursor-color         . "Grey")
+        (cursor-color         . "medium slate blue")
+        (foreground-color     . "Grey")
+        (mouse-color          . "Grey")
+        ))
 
 ;; enable commands
 

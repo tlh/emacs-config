@@ -24,6 +24,10 @@
                  'exit-minibuffer
                  'keyboard-quit)
 
+;; tlh-notify
+
+(require 'tlh-notify)
+
 ;; comint
 
 (setq comint-scroll-show-maximum-output nil

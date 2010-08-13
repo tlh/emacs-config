@@ -50,7 +50,8 @@
   )
 
 (defkeymap emms-map
-  "C-SPC"            'emms-start
+  "C-SPC"            'emms-pause
+  "C-q"              'emms-stop
   "C-b"              'emms-browser
   "C-r"              'emms-shuffle
   "C-s"              'emms-show
@@ -78,6 +79,7 @@
   "C-d"              'eldoc-mode
   "C-e"              'emacs-lisp-mode
   "C-f"              'fundamental-mode
+  "C-i"              'lisp-interaction-mode
   "C-k"              'markdown-mode
   "C-l"              'lisp-mode
   "C-m"              'magit-status
@@ -220,6 +222,7 @@
              )
 
 (fill-keymap mode-specific-map
+             "]"                'close-all-parens
              "s"                'slime-selector
              "C-s C-s"          (cmd (slime-connect "localhost" 4005))
              )
@@ -249,6 +252,11 @@
              "C-_"              'yell-at-me
              "M-_"              (cmd (dec-transparency 2))
              "M-+"              (cmd (inc-transparency 2))
+
+             ;; Hyper
+
+             "H-n"              'make-frame
+             "H-q"              'save-buffers-kill-terminal
 
              ;; quickkeys
 
@@ -319,25 +327,26 @@
 
              "<f1>"             'info-apropos
              "<f2>"             'man
-             "<f10>"            'toggle-mute-volume
-             "<f11>"            'decrease-volume
-             "<f12>"            'increase-volume
-             "M-<f1>"           'totd
-             "M-<f5>"           'ucs-insert
-             "M-<f12>"          'current-info
-             "C-M-<f1>"         'view-emacs-FAQ
-             "C-M-<f2>"         'describe-copying
-             "C-M-<f3>"         'fortune
-
-             ;; emms
-
              "<f7>"             'emms-previous
              "<f8>"             'emms-pause
              "<f9>"             'emms-next
+             "<f10>"            'toggle-mute-volume
+             "<f11>"            'decrease-volume
+             "<f12>"            'increase-volume
              "S-<f7>"           'emms-slider-seek-backward
+             "S-<f8>"           'emms-stop
              "S-<f9>"           'emms-slider-seek-forward
+             "S-<f10>"          'show-volume
+             "S-<f11>"          'show-volume
+             "S-<f12>"          'show-volume
+             "M-<f1>"           'totd
+             "M-<f5>"           'ucs-insert
+             "M-<f12>"          'current-info
              "S-M-<f7>"         'emms-seek-backward
              "S-M-<f9>"         'emms-seek-forward
+             "C-M-<f1>"         'view-emacs-FAQ
+             "C-M-<f2>"         'describe-copying
+             "C-M-<f3>"         'fortune
 
              ;; erc
 
