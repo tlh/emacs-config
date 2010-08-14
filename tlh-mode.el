@@ -470,6 +470,10 @@ predicate PRED used to filter them."
 (add-path (site-path "fuzzy"))
 (require 'fuzzy)
 
+;; emms
+
+(require 'tlh-emms)
+
 ;; provide
 
 (provide 'tlh-mode)

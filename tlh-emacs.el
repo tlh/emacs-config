@@ -17,10 +17,10 @@
 (defpathfn home-path    home-dir)
 (defpathfn emacs-path   (home-path  "emacs/"))
 (defpathfn elisp-path   (emacs-path "elisp/"))
-(defpathfn init-path    (elisp-path "init/"))
-(defpathfn private-path (elisp-path "private/"))
 (defpathfn site-path    (emacs-path "site-lisp/"))
 (defpathfn etc-path     (emacs-path "etc/"))
+(defpathfn init-path    (elisp-path "init/"))
+(defpathfn private-path (elisp-path "private/"))
 
 (defun add-path (path)
   (add-to-list 'load-path path))
@@ -34,7 +34,6 @@
                  tlh-init
                  tlh-mode
                  tlh-system
-                 tlh-emms
                  tlh-alias
                  tlh-keys
                  tlh-registers

@@ -344,11 +344,11 @@
              "C-<f9>"           (cmd (emms-slider-seek-forward  30))
              "M-<f1>"           'totd
              "M-<f5>"           'ucs-insert
-             "M-<f7>"           (cmd (emms-slider-seek-backward 120))
-             "M-<f9>"           (cmd (emms-slider-seek-forward  120))
+             "M-<f7>"           'emms-slider-seek
+             "M-<f9>"           'emms-slider-seek
              "M-<f12>"          'current-info
-             "C-M-<f7>"         'emms-slider-seek
-             "C-M-<f9>"         'emms-slider-seek
+             "C-M-<f7>"         'emms-display-track-position-slider
+             "C-M-<f9>"         'emms-display-track-position-slider
              "C-M-<f1>"         'view-emacs-FAQ
              "C-M-<f2>"         'describe-copying
              "C-M-<f3>"         'fortune

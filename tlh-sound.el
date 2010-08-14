@@ -152,11 +152,7 @@ number [0-100]."
 (defun show-volume ()
   "Display `system-volume' as a text slider in the echo area."
   (interactive)
-  (let* ((pos    (truncate system-volume))
-         (slider (make-string (1- pos) ?=))
-         (bkgd   (make-string (- 100 pos) ?-))
-         (knob   (if system-volume-muted "M" "O")))
-    (message "[%s%s%s] Vol: %s%%" slider knob bkgd system-volume)))
+  (message "system:  %s Vol: %d%%" (slider system-volume) system-volume))
 
 (defun get-volume ()
   "`get-volume-primitive' wrapper."
