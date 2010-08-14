@@ -37,7 +37,6 @@
       require-final-newline                     t
       truncate-partial-width-windows            nil
       x-select-enable-clipboard                 t
-      pager-increment                           5
       help-window-select                        nil
       visible-cursor                            nil
       ;; idle-update-delay                      0.1

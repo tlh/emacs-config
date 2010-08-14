@@ -51,14 +51,15 @@
 
 (defkeymap emms-map
   "C-SPC"            'emms-pause
-  "C-q"              'emms-stop
   "C-b"              'emms-browser
+  "C-d"              'emms-play-directory
+  "C-f"              'emms-play-file
+  "C-q"              'emms-stop
+  "C-l"              'emms-playlist-mode-go
+  "C-m"              'emms-mode-line-toggle
   "C-r"              'emms-shuffle
   "C-s"              'emms-show
-  "C-f"              'emms-play-file
-  "C-d"              'emms-play-directory
   "C-t"              'emms-play-directory-tree
-  "C-l"              'emms-playlist-mode-go
   "C-x"              'emms-play-find
   "C-p C-n"          'emms-playlist-new
   "C-p C-s"          'emms-playlist-save
@@ -310,8 +311,8 @@
 
              "s-n"              'pager-down
              "s-p"              'pager-up
-             "s-N"              (cmd (pager-down pager-increment))
-             "s-P"              (cmd (pager-up   pager-increment))
+             "s-N"              (cmd (pager-down 5))
+             "s-P"              (cmd (pager-up   5))
 
              ;; transposing
 
@@ -337,13 +338,17 @@
              "S-<f8>"           'emms-stop
              "S-<f9>"           'emms-slider-seek-forward
              "S-<f10>"          'show-volume
-             "S-<f11>"          'show-volume
-             "S-<f12>"          'show-volume
+             "S-<f11>"          'emms-mplayer-decrease-volume
+             "S-<f12>"          'emms-mplayer-increase-volume
+             "C-<f7>"           (cmd (emms-slider-seek-backward 30))
+             "C-<f9>"           (cmd (emms-slider-seek-forward  30))
              "M-<f1>"           'totd
              "M-<f5>"           'ucs-insert
+             "M-<f7>"           (cmd (emms-slider-seek-backward 120))
+             "M-<f9>"           (cmd (emms-slider-seek-forward  120))
              "M-<f12>"          'current-info
-             "S-M-<f7>"         'emms-seek-backward
-             "S-M-<f9>"         'emms-seek-forward
+             "C-M-<f7>"         'emms-slider-seek
+             "C-M-<f9>"         'emms-slider-seek
              "C-M-<f1>"         'view-emacs-FAQ
              "C-M-<f2>"         'describe-copying
              "C-M-<f3>"         'fortune

@@ -212,6 +212,8 @@ predicate PRED used to filter them."
       dired-auto-revert-buffer            t
       wdired-allow-to-change-permissions  t)
 
+(put 'dired-find-alternate-file 'disabled nil)
+
 ;; eshell
 
 (defpathfn eshell-path (etc-path "eshell/"))
