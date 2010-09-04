@@ -23,18 +23,23 @@
   )
 
 (defkeymap workgroups-map
-  "C-a"              'workgroups-ido-add-config
-  "C-e"              'workgroups-echo-current-config
-  "C-r"              'workgroups-ido-restore-config
-  "C-d"              'workgroups-ido-delete-config
-  "S-C-a"            'workgroups-add-config
-  "S-C-r"            'workgroups-restore-config
-  "S-C-d"            'workgroups-delete-config
-  "C-u"              'workgroups-update-config
-  "C-v"              'workgroups-revert-config
-  "C-l"              'workgroups-load-configs
-  "C-p"              'workgroups-prev-config
-  "C-n"              'workgroups-next-config
+  "b"                'workgroups-ido-switch
+  "C-a"              'workgroups-ido-add
+  "C-b"              'workgroups-ido-switch
+  "C-e"              'workgroups-show-current
+  "C-f"              'workgroups-find-file
+  "C-j"              'workgroups-bury
+  "C-k"              (cmd (workgroups-kill))
+  "C-n"              'workgroups-next
+  "C-p"              'workgroups-previous
+  "C-r"              'workgroups-revert
+  "C-s"              'workgroups-save
+  "C-u"              'workgroups-update
+  "C-v"              'workgroups-random
+  "C-z"              'workgroups-ido-raise
+  "S-C-a"            'workgroups-add
+  "S-C-d"            'workgroups-kill
+  "S-C-r"            'workgroups-switch
   )
 
 (defkeymap block-map
@@ -80,6 +85,7 @@
   "C-d"              'eldoc-mode
   "C-e"              'emacs-lisp-mode
   "C-f"              'fundamental-mode
+  "C-g"              'workgroups-mode
   "C-i"              'lisp-interaction-mode
   "C-k"              'markdown-mode
   "C-l"              'lisp-mode
@@ -123,7 +129,7 @@
   "C-l"              'google-lucky-search
   "C-n"              'browse-next-url
   "C-o"              'google-search
-  "C-p"              'browse-prev-url
+  "C-p"              'browse-previous-url
   "C-w"              'google-wikipedia-search
   "C-z"              (cmd (browse-url "http://www.zombo.com"))
   )
@@ -172,6 +178,10 @@
 
 ;; fill-keymaps
 
+(fill-keymap dired-mode-map
+             "C-c w"            'wdired-change-to-wdired-mode
+             )
+
 (fill-keymap text-mode-map
              "C-M-q"            'unfill-paragraph
              )
@@ -183,11 +193,12 @@
 
 (fill-keymap lisp-mode-shared-map
              "M-."              'find-function-at-point
-             "C-c C-e"          'eval-last-sexp
+             ;; "C-c C-e"          'eval-last-sexp
              "C-c e"            'eval-and-replace
              "C-c l"            "lambda"
              "C-\\"             'lisp-complete-symbol
              "C-c C-j"          'list-indent
+             "C-S-h"            'mark-list
              )
 
 (fill-keymap help-map
@@ -234,7 +245,8 @@
              "C-h"              'backward-delete-char-untabify
              "M-w"              'kill-ring-save
              "C-w"              'backward-kill-word
-             "s-b"              'ido-switch-buffer
+             ;; "s-b"              'ido-switch-buffer
+             "H-b"              'ido-switch-buffer
              "C-M-."            'ido-find-function
              "C-M-o"            'ffap
              "C-M-w"            'kill-region
@@ -245,7 +257,7 @@
              "C-M-r"            'isearch-backward
              "C-+"              'text-scale-increase
              "C--"              'text-scale-decrease
-             "S-C-k"            'kill-ring-save-line
+             "C-S-k"            'kill-ring-save-line
              "M-RET"            'ns-toggle-fullscreen
              "<backspace>"      'yell-at-me
              "M-x"              'yell-at-me
@@ -256,8 +268,12 @@
 
              ;; Hyper
 
-             "H-n"              'make-frame
-             "H-q"              'save-buffers-kill-terminal
+             ;; "H-n"              'make-frame
+             ;; "H-q"              'save-buffers-kill-terminal
+             ;; "H-h"              'workgroups-previous
+             ;; "H-l"              'workgroups-next
+             ;; "H-j"              'workgroups-bury
+             ;; "H-k"              (cmd (workgroups-kill t))
 
              ;; quickkeys
 
@@ -266,60 +282,102 @@
              "C-M-3"            'jump-to-register
              "C-M-4"            (cmd (switch-to-buffer (help-buffer)))
              "C-M-5"            'google-define
+             "C-M-7"            'recs-load-pattern-file
+             "C-M-8"            'refresh-frame
              "C-M-9"            (cmd (checkdoc-current-buffer t))
 
              ;; buffers
 
-             "C-s-h"            'previous-buffer
-             "C-s-l"            'next-buffer
-             "C-s-j"            'bury-buffer
-             "C-s-k"            (cmd (kill-buffer (current-buffer)))
+             ;; "C-s-h"            'previous-buffer
+             ;; "C-s-l"            'next-buffer
+             ;; "C-s-j"            'bury-buffer
+             ;; "C-s-k"            (cmd (kill-buffer (current-buffer)))
+
+             "C-H-h"            'previous-buffer
+             "C-H-l"            'next-buffer
+             "C-H-j"            'bury-buffer
+             "C-H-k"            (cmd (kill-buffer (current-buffer)))
 
              ;; windows
 
-             "C-s-f"            'windmove-right
-             "C-s-b"            'windmove-left
-             "C-s-n"            'windmove-down
-             "C-s-p"            'windmove-up
-             "C-s-e"            (cmd (other-window  1))
-             "C-s-a"            (cmd (other-window -1))
-             "C-s-0"            'delete-window
-             "C-s-1"            'delete-other-windows
-             "C-s-2"            'split-window-vertically
-             "C-s-3"            'split-window-horizontally
-             "C-s-4"            'window-configuration-to-register
-             "C-s-o"            'scroll-left
-             "C-s-y"            'scroll-right
-             "C-s-u"            'scroll-up
-             "C-s-i"            'scroll-down
-             "C-S-s-n"          'inc-window-height
-             "C-S-s-p"          'dec-window-height
-             "C-S-s-f"          'inc-window-width
-             "C-S-s-b"          'dec-window-width
-             "C-s-<up>"         'inc-window-height
-             "C-s-<down>"       'dec-window-height
-             "C-s-<right>"      'inc-window-width
-             "C-s-<left>"       'dec-window-width
+             ;; "C-s-f"            'windmove-right
+             ;; "C-s-b"            'windmove-left
+             ;; "C-s-n"            'windmove-down
+             ;; "C-s-p"            'windmove-up
+             ;; "C-s-e"            (cmd (other-window  1))
+             ;; "C-s-a"            (cmd (other-window -1))
+             ;; "C-s-0"            'delete-window
+             ;; "C-s-1"            'delete-other-windows
+             ;; "C-s-2"            'split-window-vertically
+             ;; "C-s-3"            'split-window-horizontally
+             ;; "C-s-4"            'window-configuration-to-register
+             ;; "C-s-o"            'scroll-left
+             ;; "C-s-y"            'scroll-right
+             ;; "C-s-u"            'scroll-up
+             ;; "C-s-i"            'scroll-down
+             ;; "C-S-s-n"          'inc-window-height
+             ;; "C-S-s-p"          'dec-window-height
+             ;; "C-S-s-f"          'inc-window-width
+             ;; "C-S-s-b"          'dec-window-width
+             ;; "C-s-<up>"         'inc-window-height
+             ;; "C-s-<down>"       'dec-window-height
+             ;; "C-s-<right>"      'inc-window-width
+             ;; "C-s-<left>"       'dec-window-width
+
+             "C-H-f"            'windmove-right
+             "C-H-b"            'windmove-left
+             "C-H-n"            'windmove-down
+             "C-H-p"            'windmove-up
+             "C-H-e"            (cmd (other-window  1))
+             "C-H-a"            (cmd (other-window -1))
+             "C-H-0"            'delete-window
+             "C-H-1"            'delete-other-windows
+             "C-H-2"            'split-window-vertically
+             "C-H-3"            'split-window-horizontally
+             "C-H-4"            'window-configuration-to-register
+             "C-H-o"            'scroll-left
+             "C-H-y"            'scroll-right
+             "C-H-u"            'scroll-up
+             "C-H-i"            'scroll-down
+             "C-H-S-n"          'inc-window-height
+             "C-H-S-p"          'dec-window-height
+             "C-H-S-f"          'inc-window-width
+             "C-H-S-b"          'dec-window-width
+             "C-H-<up>"         'inc-window-height
+             "C-H-<down>"       'dec-window-height
+             "C-H-<right>"      'inc-window-width
+             "C-H-<left>"       'dec-window-width
 
              ;; workgroups
 
-             "C-s-s"            'workgroups-update-config
-             "C-s-,"            'workgroups-prev-config
-             "C-s-."            'workgroups-next-config
+             ;; "C-s-s"            'workgroups-update
+             ;; "C-s-,"            'workgroups-previous
+             ;; "C-s-."            'workgroups-next
+
+             "C-H-s"            'workgroups-update
+             "C-H-,"            'workgroups-previous
+             "C-H-."            'workgroups-next
 
              ;; moving point
 
-             "s-n"              'pager-down
-             "s-p"              'pager-up
-             "s-N"              (cmd (pager-down 5))
-             "s-P"              (cmd (pager-up   5))
+             ;; "s-n"              'pager-down
+             ;; "s-p"              'pager-up
+             ;; "s-N"              (cmd (pager-down 5))
+             ;; "s-P"              (cmd (pager-up   5))
+
+             "H-n"              'pager-down
+             "H-p"              'pager-up
+             "H-N"              (cmd (pager-down 5))
+             "H-P"              (cmd (pager-up   5))
 
              ;; transposing
 
              "C-S-t"            'backward-transpose-chars
              "M-T"              'backward-transpose-words
-             "s-t"              'transpose-lines
-             "s-T"              'backward-transpose-lines
+             ;; "s-t"              'transpose-lines
+             ;; "s-T"              'backward-transpose-lines
+             "H-t"              'transpose-lines
+             "H-T"              'backward-transpose-lines
              "C-M-S-t"          'backward-transpose-sexps
              "M-p"              'transpose-paragraphs
              "M-P"              'backward-transpose-paragraphs
@@ -355,9 +413,16 @@
 
              ;; erc
 
-             "C-s-["            'prev-erc-buffer
-             "C-s-]"            'next-erc-buffer
+             ;; "C-s-["            'prev-erc-buffer
+             ;; "C-s-]"            'next-erc-buffer
+
+             "C-H-["            'prev-erc-buffer
+             "C-H-]"            'next-erc-buffer
 
              )
 
+;; provide
+
 (provide 'tlh-keys)
+
+;; tlh-keys.el ends here

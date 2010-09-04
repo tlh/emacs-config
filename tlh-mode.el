@@ -1,15 +1,13 @@
-;;; mode-specifig configs
+;;; mode configs
 
 ;; color-theme
 
 (add-path (site-path "color-theme"))
 (setq color-theme-load-all-themes nil)
 (require 'color-theme)
-(color-theme-initialize)
 
 (add-path (elisp-path "color-themes/"))
 (require 'color-theme-thunk1)
-;; (color-theme-thunk1)
 (add-hook 'after-init-hook 'color-theme-thunk1)
 
 ;; tlh-sound
@@ -106,12 +104,14 @@
 (when (> emacs-major-version 21)
   (ido-mode t)
   (ido-everywhere 1)
-  (setq ido-enable-prefix nil
-        ido-enable-flex-matching t
-        ido-create-new-buffer 'always
-        ido-use-filename-at-point nil
-        ido-max-prospects 10
-        ido-save-directory-list-file (etc-path "ido.last")))
+  (setq ido-enable-prefix             nil
+        ido-enable-flex-matching      t
+        ido-create-new-buffer        'always
+        ido-use-filename-at-point     nil
+        ido-max-prospects             50
+        ido-use-faces                 t
+        ido-max-window-height         nil
+        ido-save-directory-list-file  (etc-path "ido.last")))
 
 (defun ido-imenu ()
   "Query with `ido-completing-read' a symbol in the buffer's
@@ -205,34 +205,60 @@ predicate PRED used to filter them."
 
 (require 'dired)
 
-(fill-keymap dired-mode-map "C-c w" 'wdired-change-to-wdired-mode)
-
 (setq directory-free-space-program        "df"
       directory-free-space-args           "-h"
       dired-auto-revert-buffer            t
       wdired-allow-to-change-permissions  t)
 
-(put 'dired-find-alternate-file 'disabled nil)
+(command-enable 'dired-find-alternate-file)
 
 ;; eshell
 
 (defpathfn eshell-path (etc-path "eshell/"))
 
-(setq eshell-directory-name              (eshell-path)
-      eshell-aliases-file                (eshell-path "alias")
-      eshell-history-file-name           (eshell-path "history")
-      eshell-last-dir-ring-file-name     (eshell-path "lastdir")
-      eshell-ls-use-in-dired             t
-      eshell-save-history-on-exit        t
-      eshell-scroll-show-maximum-output  nil
-      eshell-scroll-to-bottom-on-output  nil
-      eshell-cmpl-cycle-completions      nil)
+(defun tlh-eshell-prompt-fn ()
+  (format "[%s@%s:%s]%s "
+          user-login-name
+          system-name
+          (abbreviate-file-name (eshell/pwd))
+          (if (= (user-uid) 0) "#" "$")))
+
+(defun tlh-setup-eshell ()
+  (require 'em-prompt)
+  (require 'em-term)
+  (require 'em-cmpl)
+  (require 'em-banner)
+
+  (add-all-to-list 'eshell-visual-commands "ssh" "tail")
+  (add-all-to-list 'eshell-command-completions-alist
+                   '("gunzip" . "gz\\'")
+                   '("tar" . "\\(\\.tar\\|\\.tgz\\|\\.tar\\.gz\\)\\'"))
+
+  (setq eshell-directory-name              (eshell-path)
+        eshell-aliases-file                (eshell-path "alias")
+        eshell-history-file-name           (eshell-path "history")
+        eshell-last-dir-ring-file-name     (eshell-path "lastdir")
+        eshell-ls-use-in-dired             t
+        eshell-save-history-on-exit        t
+        eshell-cmpl-cycle-completions      t
+        eshell-scroll-show-maximum-output  nil
+        eshell-scroll-to-bottom-on-output  nil
+        eshell-prompt-function            'tlh-eshell-prompt-fn
+        eshell-prompt-regexp               "^[^#$\n]*[#$] "
+        eshell-banner-message              " -={ Fuck Off }=-\n\n"))
+
+(add-hook 'eshell-load-hook 'tlh-setup-eshell)
 
 ;; workgroups
 
-(add-path (elisp-path "workgroups"))
-(require 'workgroups)
-(setq workgroups-configs-file (etc-path "workgroups-configs"))
+(add-path (elisp-path "workgroups-mode"))
+(require 'workgroups-mode)
+
+(setq workgroups-default-file   (etc-path "workgroups-configs")
+      workgroups-autosave       nil
+      workgroups-autoswitch     t)
+
+(workgroups-mode t)
 
 ;; recs-mode
 
@@ -363,6 +389,7 @@ predicate PRED used to filter them."
         (clozure ("/usr/bin/dx86cl64"))))
 
 (add-path (site-path "slime"))
+
 (require 'slime-autoloads)
 
 ;; other contribs: slime-references slime-scratch
@@ -370,8 +397,18 @@ predicate PRED used to filter them."
 ;;                 inferior-slime-mode
 
 (slime-setup '(slime-fancy slime-asdf slime-banner))
-(when (featurep 'slime-autodoc) (unload-feature 'slime-autodoc))
+
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+
+(defun define-slime-keys ()
+  (fill-keymap slime-mode-map
+               "C-M-:"     'slime-interactive-eval
+               "C-c C-e"   'slime-eval-last-expression))
+
+(add-hook 'slime-mode-hook 'define-slime-keys)
+
+(when (featurep 'slime-autodoc)
+  (unload-feature 'slime-autodoc t))
 
 ;; markdown-mode
 
@@ -393,7 +430,8 @@ predicate PRED used to filter them."
 
 ;; url vars
 
-(defvar url-regexp "https?://")
+(defvar strict-url-regexp "https?://")
+(defvar permissive-url-regexp "\\(https?://\\)?\\(www\\.\\)?.+\\....?")
 (defvar google-search-string "http://www.google.com/search?q=")
 (defvar google-lucky-search-string "http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=")
 
@@ -429,16 +467,18 @@ predicate PRED used to filter them."
       (goto-char (funcall finder-fn)))
     (browse-url-at-point)))
 
-(defun browse-prev-url (&optional num)
+(defun browse-previous-url (&optional num)
   (interactive "P")
-  (browse-url-find (lambda () (search-backward-regexp url-regexp)) num))
+  (browse-url-find (lambda () (search-backward-regexp strict-url-regexp)) num))
 
 (defun browse-next-url (&optional num)
   (interactive "P")
-  (browse-url-find (lambda () (search-forward-regexp url-regexp)) num))
+  (browse-url-find (lambda () (search-forward-regexp strict-url-regexp)) num))
 
 (defun google-search (terms)
-  (interactive (list (read-from-minibuffer "Query: ")))
+  (interactive (list (if (region-active-p)
+                         (buffer-substring (region-beginning) (region-end))
+                       (read-from-minibuffer "Query: "))))
   (tlh-google-search nil terms))
 
 (defun google-lucky-search (terms)
@@ -465,14 +505,30 @@ predicate PRED used to filter them."
 (setq yaoddmuse-username "tlh"
       yaoddmuse-directory (etc-path "yaoddmuse/"))
 
-;; fuzzy
-
-(add-path (site-path "fuzzy"))
-(require 'fuzzy)
+;; ;; fuzzy
+;; (add-path (site-path "fuzzy"))
+;; (require 'fuzzy)
 
 ;; emms
 
 (require 'tlh-emms)
+
+;; undo-tree
+
+(add-path (site-path "undo-tree"))
+(require 'undo-tree)
+(global-undo-tree-mode)
+
+;; zone
+
+(require 'zone)
+(zone-when-idle 300)
+
+;; malyon
+
+(add-path (site-path "malyon"))
+
+(require 'malyon)
 
 ;; provide
 

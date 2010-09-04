@@ -14,7 +14,7 @@
                 ?s (elisp-path "recs-mode/recs-mode.el")
                 ?t (elisp-path "color-themes/color-theme-thunk1.el")
                 ?u (elisp-path "tlh-util/tlh-util.el")
-                ?w (elisp-path "workgroups/workgroups.el")
+                ?w (elisp-path "workgroups-mode/workgroups-mode.el")
                 ?y (init-path  "tlh-system.el"))
 
 (provide 'tlh-registers)

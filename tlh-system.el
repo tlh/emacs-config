@@ -10,13 +10,23 @@
   (blink-cursor-mode  -1)
   (mouse-wheel-mode    t))
 
-;; os
+;; system-type
 
 (case system-type
   ((gnu/linux linux)
    nil)
   (darwin
    (require 'tlh-osx)))
+
+;; system-name
+
+(case system-name
+  ("bine.local" nil))
+
+;; user
+
+(case user-login-name
+  ("luke" nil))
 
 ;; provide
 

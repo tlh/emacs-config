@@ -22,9 +22,11 @@
 
 (defun tlh-emms-track-description (&optional track)
   (let ((track (or track (current-track))))
-    (apply 'format "%s - [%s] %s - %s"
-           (mapcar (lambda (p) (emms-track-get track p))
-                   '(info-artist info-year info-album info-title)))))
+    (format "%s - [%s] %s - %s"
+            (emms-track-get track 'info-artist)
+            (emms-track-get track 'info-year)
+            (emms-track-get track 'info-album)
+            (emms-track-get track 'info-title))))
 
 ;; seek slider
 
@@ -89,20 +91,24 @@
          (set-buffer emms-player-output-buffer)
          (erase-buffer)
          (process-send-string emms-player-simple-process-name cmd)
-         (when (and respond (accept-process-output it 1))
-           (goto-char (point-min))
-           (ignore-errors
-             (re-search-forward "=\\(.+\\)\n")
-             (let ((val (match-string 1)))
-               (if read (read val) val)))))
+         (if (not respond)
+             t
+           (when (accept-process-output it 1)
+             (goto-char (point-min))
+             (ignore-errors
+               (re-search-forward "=\\(.+\\)\n")
+               (let ((val (match-string 1)))
+                 (if read (read val) val))))))
        (message "Nothing is currently playing.")
        nil))
 
-(defun emms-mplayer-set-volume-abs (vol)
-  (emms-mplayer-cmd (format "volume %s 1\n" (confine-to 0 100 vol))))
+(defun emms-mplayer-set-volume (vol)
+  (emms-mplayer-cmd
+   (format "volume %s 1\n" (confine-to 0 100 vol))))
 
 (defun emms-mplayer-step-volume (step)
-  (emms-mplayer-cmd (format "step_property volume %s\n" step)))
+  (emms-mplayer-cmd
+   (format "step_property volume %s\n" step)))
 
 (defun emms-mplayer-track-position ()
   (emms-mplayer-cmd "get_percent_pos\n" t t))
@@ -123,20 +129,23 @@
 (def-emms-mplayer-cmd year    "get_meta_year\n")
 
 (defun emms-mplayer-offset-volume (offset)
-  (when emms-player-playing-p
-    (emms-mplayer-step-volume offset)
+  (when (emms-mplayer-step-volume offset)
     (let ((vol (emms-mplayer-volume)))
       (message "mplayer: %s Vol: %d%%" (slider vol) vol))))
 
 (defun emms-mplayer-decrease-volume (&optional dec)
   (interactive)
-  (emms-mplayer-offset-volume (- (or dec emms-mplayer-volume-increment))))
+  (emms-mplayer-offset-volume
+   (- (or dec emms-mplayer-volume-increment))))
 
 (defun emms-mplayer-increase-volume (&optional inc)
   (interactive)
-  (emms-mplayer-offset-volume (or inc emms-mplayer-volume-increment)))
+  (emms-mplayer-offset-volume
+   (or inc emms-mplayer-volume-increment)))
 
 ;; settings
+
+(defpathfn emms-path (etc-path "emms/"))
 
 (setq emms-player-list                     '(emms-player-mplayer)
       emms-playlist-default-major-mode     'emms-playlist-mode
@@ -144,7 +153,8 @@
       emms-info-functions                  '(emms-info-id3v2 emms-info-ogginfo)
       emms-track-description-function      'tlh-emms-track-description
       emms-source-file-default-directory    (home-path "Music/iTunes/iTunes Media/Music/")
-      emms-cache-file                       (etc-path "emms/cache")
+      emms-directory                        (emms-path)
+      emms-cache-file                       (emms-path "cache")
       emms-repeat-playlist                  t
       emms-track-position-function         'emms-mplayer-track-position
       emms-player-mplayer-parameters       '("-slave" "-quiet")

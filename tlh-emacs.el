@@ -1,6 +1,8 @@
-;;; Main directory structure functions and lib require's
+;;; path fns and requires
 
-(byte-compile-disable-warning 'cl-functions)
+(when (> emacs-major-version 22)
+  (with-no-warnings
+    (byte-compile-disable-warning 'cl-functions)))
 
 (eval-when-compile
   (require 'cl))
@@ -14,7 +16,7 @@
   `(defun ,name (&optional sub)
      (expand-file-name (concat ,path (or sub "")))))
 
-(defpathfn home-path    home-dir)
+(defpathfn home-path     home-dir)
 (defpathfn emacs-path   (home-path  "emacs/"))
 (defpathfn elisp-path   (emacs-path "elisp/"))
 (defpathfn site-path    (emacs-path "site-lisp/"))

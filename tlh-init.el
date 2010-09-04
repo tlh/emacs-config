@@ -1,4 +1,4 @@
-;;; non-mode-specific configs
+;;; core configs
 
 ;; server
 
@@ -13,41 +13,56 @@
 
 ;; variable configs
 
-(setq inhibit-splash-screen                     t
-      inhibit-startup-message                   t
-      inhibit-startup-echo-area-message         user-login-name
-      user-full-name                            "tlh"
-      user-mail-address                         "thunkout@gmail.com"
-      custom-file                               (elisp-path "tlh-custom.el")
-      auto-save-list-file-prefix                (etc-path "auto-save-list/.saves-")
-      backup-directory-alist                   `(("." . ,(home-path "tcvol1/emacs-misc/backups/")))
-      yow-file                                  (etc-path "yow.lines")
-      junk-file                                 (etc-path "junk")
-      initial-scratch-message                   (yow-comment)
-      initial-major-mode                        'emacs-lisp-mode
-      line-number-mode                          t
-      column-number-mode                        t
-      size-indication-mode                      t
-      font-lock-maximum-decoration              t
-      require-final-newline                     t
-      echo-keystrokes                           0.1
-      transient-mark-mode                       t
-      color-theme-is-global                     t
-      shift-select-mode                         nil
-      require-final-newline                     t
-      truncate-partial-width-windows            nil
-      x-select-enable-clipboard                 t
-      help-window-select                        nil
-      visible-cursor                            nil
-      ;; idle-update-delay                      0.1
-      )
+(setq
+ user-full-name                            "tlh"
+ user-mail-address                         "thunkout@gmail.com"
+ user-emacs-directory                      (emacs-path)
+ backup-directory-alist                   `(("." . ,(home-path "tcvol1/emacs-misc/backups/")))
+ custom-file                               (elisp-path "tlh-custom.el")
+ auto-save-list-file-prefix                (etc-path "auto-save-list/.saves-")
+ yow-file                                  (etc-path "yow.lines")
+ junk-file                                 (etc-path "junk")
+ initial-major-mode                        'emacs-lisp-mode
+ inhibit-startup-echo-area-message         user-login-name
+ initial-scratch-message                   (yow-comment)
+ inhibit-splash-screen                     t
+ inhibit-startup-message                   t
+ enable-recursive-minibuffers              t
+ line-number-mode                          t
+ column-number-mode                        t
+ size-indication-mode                      t
+ font-lock-maximum-decoration              t
+ require-final-newline                     t
+ transient-mark-mode                       t
+ color-theme-is-global                     t
+ require-final-newline                     t
+ x-select-enable-clipboard                 t
+ scroll-preserve-screen-position           t
+ read-quoted-char-radix                    10
+ next-screen-context-lines                 1
+ scroll-margin                             0
+ ;; scroll-up-aggressively                    0
+ ;; scroll-down-aggressively                  0
+ confirm-nonexistent-file-or-buffer        nil
+ redisplay-dont-pause                      nil
+ redisplay-preemption-period               0.1
+ scroll-conservatively                     10000
+ echo-keystrokes                           0.1
+ ;; idle-update-delay                      0.1
+ truncate-partial-width-windows            nil
+ shift-select-mode                         nil
+ help-window-select                        nil
+ visible-cursor                            nil
+ )
 
 ;; buffer-local defaults
 
-(set-default 'indent-tabs-mode      nil)
-(set-default 'indicate-empty-lines  nil)
+(setq-default
+ indent-tabs-mode                          nil
+ indicate-empty-lines                      nil
+ cursor-type                              'box)
 
-;; mode toggles
+;; turn on some modes
 
 (global-font-lock-mode     t)
 (global-auto-revert-mode   1)
@@ -55,6 +70,7 @@
 (auto-image-file-mode      t)
 (show-paren-mode          -1)
 (delete-selection-mode    -1)
+(blink-cursor-mode         nil)
 
 ;; info path
 
@@ -62,27 +78,31 @@
 
 ;; default-frame-alist
 
-;; (set-frame-font "Menlo-12")
-;; (set-frame-font "DejaVu Sans Mono-12")
-
 (setq default-frame-alist
-      `((font                 . "Menlo-12")
-        ;; (font                 . "DejaVu Sans Mono-12")
-        (vertical-scroll-bars . nil)
-        (tool-bar-lines       . 0)
-        (menu-bar-lines       . 0)
-        (background-mode      . dark)
-        (background-color     . "Grey15")
-        (border-color         . "Black")
-        ;; (cursor-color         . "Grey")
-        (cursor-color         . "medium slate blue")
-        (foreground-color     . "Grey")
-        (mouse-color          . "Grey")
+      `((font                      . "Menlo-12") ;; "DejaVu Sans Mono-12"
+        (background-mode           . dark)
+        (background-color          . "Grey15")
+        (border-color              . "Black")
+        ;; (cursor-color           . "Grey")
+        (cursor-color              . "medium slate blue")
+        (foreground-color          . "Grey")
+        (mouse-color               . "Grey")
+        (vertical-scroll-bars      . nil)
+        (horizontal-scroll-bars    . nil)
+        (tool-bar-lines            . 0)
+        (menu-bar-lines            . 0)
+        (right-fringe              . 4)
+        (left-fringe               . 4)
+        (internal-border-width     . 2)
+        (border-width              . 0)
         ))
 
-;; enable commands
+;; enable disabled commands
 
-(mapc 'enable-command '(set-goal-column scroll-left))
+(mapc 'command-enable '(set-goal-column
+                        scroll-left
+                        narrow-to-region
+                        erase-buffer))
 
 ;; seed random
 
