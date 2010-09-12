@@ -11,7 +11,7 @@
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
 
-;; variable configs
+;; set variables
 
 (setq
  user-full-name                            "tlh"
@@ -20,6 +20,7 @@
  backup-directory-alist                   `(("." . ,(home-path "tcvol1/emacs-misc/backups/")))
  custom-file                               (elisp-path "tlh-custom.el")
  auto-save-list-file-prefix                (etc-path "auto-save-list/.saves-")
+ tex-directory                             (etc-path "tex")
  yow-file                                  (etc-path "yow.lines")
  junk-file                                 (etc-path "junk")
  initial-major-mode                        'emacs-lisp-mode
@@ -38,6 +39,10 @@
  require-final-newline                     t
  x-select-enable-clipboard                 t
  scroll-preserve-screen-position           t
+ undo-limit                                1000000
+ undo-outer-limit                          nil
+ undo-string-limit                         undo-limit
+ history-length                            10000
  read-quoted-char-radix                    10
  next-screen-context-lines                 1
  scroll-margin                             0
@@ -55,7 +60,7 @@
  visible-cursor                            nil
  )
 
-;; buffer-local defaults
+;; set buffer-local variable defaults
 
 (setq-default
  indent-tabs-mode                          nil

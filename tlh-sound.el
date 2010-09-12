@@ -40,9 +40,11 @@
 
 ;;; Configuration:
 ;;
-;;  - Set play-sound-function
+;;  - Set `play-sound-function' to a function that takes the path of a
+;;    sound file and plays it.
 ;;
-;;  - Set ring-bell-function
+;;  - You can set emacs' `ring-bell-function' to `pretty-ding' if you
+;;    want to play sound files on error.
 ;;
 
 ;;; Code:
@@ -124,19 +126,22 @@ number [0-100]."
 (defun play-sound (filename)
   (condition-case nil
       (funcall play-sound-function filename)
-    (error "`play-sound-function' must be a function that takes a filename arg and plays it.")))
+    (error "`play-sound-function' must be a function that takes a \
+filename arg and plays it.")))
 
 (defun get-volume-primitive (&optional no-update)
   "Get the actual system volume."
   (condition-case nil
       (funcall get-volume-function)
-    (error "`get-volume-function' must be a function that returns the system volume as a number [0-100].")))
+    (error "`get-volume-function' must be a function that returns the \
+system volume as a number [0-100].")))
 
 (defun set-volume-primitive (vol)
   "Set system volume to VOL. VOL is confined to [0-100]."
   (condition-case nil
       (funcall set-volume-function (confine-to 0 100 vol))
-    (error "`set-volume-function' must be a function of one argument that sets the system volume.")))
+    (error "`set-volume-function' must be a function of one argument \
+that sets the system volume.")))
 
 (defun pretty-ding ()
   "Intended to be set as the value of `ring-bell-function'."

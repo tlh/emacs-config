@@ -26,6 +26,12 @@
 
 (require 'tlh-notify)
 
+;; bbdb
+
+(add-path (site-path "bbdb"))
+(require 'bbdb)
+(bbdb-initialize)
+
 ;; comint
 
 (setq comint-scroll-show-maximum-output nil
@@ -111,7 +117,9 @@
         ido-max-prospects             50
         ido-use-faces                 t
         ido-max-window-height         nil
-        ido-save-directory-list-file  (etc-path "ido.last")))
+        ido-save-directory-list-file  (etc-path "ido.last")
+        ido-default-file-method       'selected-window
+        ido-default-buffer-method     'selected-window))
 
 (defun ido-imenu ()
   "Query with `ido-completing-read' a symbol in the buffer's
@@ -283,9 +291,13 @@ predicate PRED used to filter them."
       uniquify-after-kill-buffer-p t
       uniquify-ignore-buffers-re "^\\*")
 
+;; epa
+
+(when (require 'epa-file nil t)
+  (setenv "GPG_AGENT_INFO"))
+
 ;; acct
 
-(require 'epa-file)
 (add-path (elisp-path "acctdb"))
 (require 'acctdb)
 ;; (setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
@@ -372,16 +384,6 @@ predicate PRED used to filter them."
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 
-;; clojure-mode
-
-(add-path (site-path "clojure-mode"))
-(autoload 'clojure-mode "clojure-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
-(add-hook 'clojure-mode-hook
-          'coding-hook
-          'unicode-lambdas
-          'cleanup-buffer-on-save)
-
 ;; slime
 
 (setq slime-lisp-implementations
@@ -391,6 +393,7 @@ predicate PRED used to filter them."
 (add-path (site-path "slime"))
 
 (require 'slime-autoloads)
+(require 'slime)
 
 ;; other contribs: slime-references slime-scratch
 ;;                 slime-editing-commands slime-repl
@@ -409,6 +412,30 @@ predicate PRED used to filter them."
 
 (when (featurep 'slime-autodoc)
   (unload-feature 'slime-autodoc t))
+
+;; clojure-mode
+
+(add-path (site-path "clojure-mode"))
+;; (autoload 'clojure-mode "clojure-mode" nil t)
+(require 'clojure-mode)
+(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+(add-hook 'clojure-mode-hook
+          'coding-hook
+          'unicode-lambdas
+          'cleanup-buffer-on-save)
+
+;; conditionally setup slime repl for clojure
+
+(defun slime-clojure-repl-setup ()
+  (when (string-equal "clojure" (slime-connection-name))
+    (clojure-mode-font-lock-setup)
+    (set-syntax-table clojure-mode-syntax-table)
+    (setq lisp-indent-function 'clojure-indent-function)
+    (when (and (featurep 'paredit) paredit-mode (>= paredit-version 21))
+      (define-key slime-repl-mode-map "{" 'paredit-open-curly)
+      (define-key slime-repl-mode-map "}" 'paredit-close-curly))))
+
+(add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup)
 
 ;; markdown-mode
 
@@ -442,10 +469,11 @@ predicate PRED used to filter them."
 (require 'w3m-load)
 ;; (require 'mime-w3m)
 
-(setq w3m-key-binding 'info
-      w3m-home-page "about:"
-      w3m-default-directory (etc-path "w3m/")
-      w3m-profile-directory (etc-path "w3m/"))
+(setq w3m-key-binding            'info
+      w3m-home-page              "about:"
+      w3m-default-directory      (etc-path "w3m/")
+      w3m-profile-directory      (etc-path "w3m/")
+      w3m-fill-column            100)
 
 (defun w3m-emacswiki-new-session (topic)
   (interactive "sTopic: ")
@@ -522,13 +550,18 @@ predicate PRED used to filter them."
 ;; zone
 
 (require 'zone)
-(zone-when-idle 300)
+(zone-when-idle -1)
 
 ;; malyon
 
 (add-path (site-path "malyon"))
 
 (require 'malyon)
+
+;; goto-last-change
+
+(add-path (site-path "goto-last-change"))
+(require 'goto-last-change)
 
 ;; provide
 

@@ -42,16 +42,16 @@
   "S-C-r"            'workgroups-switch
   )
 
-(defkeymap block-map
-  "C-k"              'kill-block
-  "C-s"              'save-block
-  "C-u"              'uncomment-block
-  "C-b"              'comment-or-uncomment-block
+(defkeymap region-map
+  "C-k"              'kill-whole-paragraph
+  "C-s"              'save-paragraph
+  "C-u"              'uncomment-paragraph
+  "C-b"              'comment-or-uncomment-paragraph
   "C-d"              'comment-defun
-  "C-c"              'duplicate-block
-  "C-x"              'duplicate-and-comment-block
-  "C-j"              (cmd (kill-block-append-to-file junk-file))
-  "C-i"              'indent-block
+  "C-c"              'duplicate-paragraph
+  "C-x"              'duplicate-and-comment-paragraph
+  "C-j"              (cmd (kill-paragraph-append-to-file junk-file))
+  "C-i"              'indent-paragraph
   )
 
 (defkeymap emms-map
@@ -159,7 +159,7 @@
 (defkeymap command-root-map
   "C-a"              acct-map
   "C-b"              buffer-map
-  "C-c"              block-map
+  "C-c"              region-map
   "C-d"              directory-map
   "C-f"              file-map
   "C-g"              games-map
@@ -193,7 +193,7 @@
 
 (fill-keymap lisp-mode-shared-map
              "M-."              'find-function-at-point
-             ;; "C-c C-e"          'eval-last-sexp
+             "C-c C-e"          'eval-last-sexp
              "C-c e"            'eval-and-replace
              "C-c l"            "lambda"
              "C-\\"             'lisp-complete-symbol
@@ -257,7 +257,7 @@
              "C-M-r"            'isearch-backward
              "C-+"              'text-scale-increase
              "C--"              'text-scale-decrease
-             "C-S-k"            'kill-ring-save-line
+             "C-S-k"            'save-line
              "M-RET"            'ns-toggle-fullscreen
              "<backspace>"      'yell-at-me
              "M-x"              'yell-at-me
@@ -265,15 +265,11 @@
              "C-_"              'yell-at-me
              "M-_"              (cmd (dec-transparency 2))
              "M-+"              (cmd (inc-transparency 2))
+             "C-x C-\\"         'goto-last-change
 
              ;; Hyper
 
-             ;; "H-n"              'make-frame
-             ;; "H-q"              'save-buffers-kill-terminal
-             ;; "H-h"              'workgroups-previous
-             ;; "H-l"              'workgroups-next
-             ;; "H-j"              'workgroups-bury
-             ;; "H-k"              (cmd (workgroups-kill t))
+             "H-k"              'kill-whole-line
 
              ;; quickkeys
 
