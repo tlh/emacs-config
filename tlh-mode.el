@@ -332,7 +332,7 @@ predicate PRED used to filter them."
   (setenv "GPG_AGENT_INFO"))
 
 
-;;; acct
+;;; acctdb
 
 (add-path (elisp-path "acctdb"))
 (require 'acctdb)
@@ -637,15 +637,12 @@ predicate PRED used to filter them."
 
 ;;; edit-server
 
-;; (defun edit-server-backup ()
-;;   (let ((file (join-string (split-string (current-time-string)) "-")))
-;;     (write-region (point-min) (point-max)
-;;                   (etc-path (format "edit-server-backups/%s" file)))))
-
 (defun edit-server-backup ()
-  (push (buffer-string) foo))
-
-;; (kill-ring-save (point-min) (point-max)))
+  (write-region
+   (point-min) (point-max)
+   (etc-path
+    (format "edit-server-backups/edited-on-%s.txt"
+            (replace-regexp-in-string " " "-" (current-time-string))))))
 
 (when window-system
   (add-path (site-path "edit-server"))
