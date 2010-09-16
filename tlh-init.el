@@ -73,7 +73,6 @@
 (global-auto-revert-mode   1)
 (auto-compression-mode     t)
 (auto-image-file-mode      t)
-(show-paren-mode          -1)
 (delete-selection-mode    -1)
 (blink-cursor-mode         nil)
 

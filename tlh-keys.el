@@ -10,11 +10,12 @@
   )
 
 (defkeymap file-map
-  "C-r"              'ido-recentf-find-file
-  "C-o"              'ido-find-file-other-window
-  "C-s"              'ido-sudo-find-file
   "C-c"              'file-cache-minibuffer-complete
   "C-l"              'load-file
+  "C-m"              'move-file-and-buffer
+  "C-o"              'ido-find-file-other-window
+  "C-r"              'ido-recentf-find-file
+  "C-s"              'ido-sudo-find-file
   )
 
 (defkeymap directory-map
@@ -92,6 +93,7 @@
   "C-m"              'magit-status
   "C-o"              'org-mode
   "C-p"              'paredit-mode
+  "C-P"              'show-paren-mode
   "C-r"              'rainbow-mode
   "C-s"              'recs-mode
   "C-t"              'text-mode

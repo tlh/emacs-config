@@ -1,6 +1,7 @@
 ;;; mode configs
 
-;; color-theme
+
+;;; color-theme
 
 (add-path (site-path "color-theme"))
 (setq color-theme-load-all-themes nil)
@@ -10,7 +11,8 @@
 (require 'color-theme-thunk1)
 (add-hook 'after-init-hook 'color-theme-thunk1)
 
-;; tlh-sound
+
+;;; tlh-sound
 
 (require 'tlh-sound)
 (setq ring-bell-function 'pretty-ding
@@ -22,33 +24,47 @@
                  'exit-minibuffer
                  'keyboard-quit)
 
-;; tlh-notify
+
+;;; show-paren-mode
+
+(show-paren-mode 1)
+(setq show-paren-delay                  0.0
+      show-paren-ring-bell-on-mismatch  t
+      show-paren-style                 'parenthesis)
+
+;;; tlh-notify
 
 (require 'tlh-notify)
 
-;; bbdb
+
+;;; bbdb
 
 (add-path (site-path "bbdb"))
 (require 'bbdb)
 (bbdb-initialize)
 
-;; comint
 
-(setq comint-scroll-show-maximum-output nil
-      comint-scroll-to-bottom-on-input  nil
-      comint-prompt-read-only           t)
+;;; comint
 
-;; recentf
+(setq-default comint-scroll-show-maximum-output nil
+              comint-scroll-to-bottom-on-input  nil)
+
+(setq comint-prompt-read-only t)
+
+
+;;; recentf
 
 (recentf-mode 1)
 (setq recentf-save-file (etc-path "recentf"))
 
-;; saveplace
+
+;;; saveplace
 
 (require 'saveplace)
 (setq save-place-file (etc-path "saved-places"))
 
-;; whitespace-mode
+
+;;; whitespace-mode
 
 (setq whitespace-line-column 100
       whitespace-style '(trailing
@@ -56,11 +72,13 @@
                          indentation
                          space-after-tab))
 
-;; text-mode
+
+;;; text-mode
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-;; coding-hook
+
+;;; coding-hook
 
 (defun coding-hook ()
   (setq save-place t)
@@ -69,7 +87,8 @@
   (whitespace-mode t)
   (add-watchwords))
 
-;; emacs-lisp-mode
+
+;;; emacs-lisp-mode
 
 (setq eval-expression-print-level   20
       eval-expression-print-length  20)
@@ -81,31 +100,36 @@
            'unicode-lambdas
            'cleanup-buffer-on-save)
 
-;; lisp-mode
+
+;;; lisp-mode
 
 (add-hooks 'lisp-mode-hook
            'coding-hook
            'unicode-lambdas
            'cleanup-buffer-on-save)
 
-;; windmove
+
+;;; windmove
 
 (require 'windmove)
 (setq windmove-wrap-around t)
 
-;; browse-kill-ring
+
+;;; browse-kill-ring
 
 (add-path (site-path "browse-kill-ring"))
 (require 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
 (setq browse-kill-ring-quit-action 'save-and-restore)
 
-;; imenu
+
+;;; imenu
 
 (require 'imenu)
 (setq imenu-auto-rescan t)
 
-;; ido
+
+;;; ido
 
 (when (> emacs-major-version 21)
   (ido-mode t)
@@ -209,7 +233,8 @@ predicate PRED used to filter them."
   (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
     (when file (find-file file))))
 
-;; dired
+
+;;; dired
 
 (require 'dired)
 
@@ -220,14 +245,20 @@ predicate PRED used to filter them."
 
 (command-enable 'dired-find-alternate-file)
 
-;; eshell
+
+;;; eshell
 
 (defpathfn eshell-path (etc-path "eshell/"))
 
+;; (defun tlh-eshell-prompt-fn ()
+;;   (format "[%s@%s:%s]%s "
+;;           user-login-name
+;;           system-name
+;;           (abbreviate-file-name (eshell/pwd))
+;;           (if (= (user-uid) 0) "#" "$")))
+
 (defun tlh-eshell-prompt-fn ()
-  (format "[%s@%s:%s]%s "
-          user-login-name
-          system-name
+  (format "%s%s "
           (abbreviate-file-name (eshell/pwd))
           (if (= (user-uid) 0) "#" "$")))
 
@@ -257,7 +288,8 @@ predicate PRED used to filter them."
 
 (add-hook 'eshell-load-hook 'tlh-setup-eshell)
 
-;; workgroups
+
+;;; workgroups
 
 (add-path (elisp-path "workgroups-mode"))
 (require 'workgroups-mode)
@@ -268,7 +300,8 @@ predicate PRED used to filter them."
 
 (workgroups-mode t)
 
-;; recs-mode
+
+;;; recs-mode
 
 (add-path (elisp-path "recs-mode"))
 (require 'recs-mode)
@@ -283,7 +316,8 @@ predicate PRED used to filter them."
 
 (add-hook 'recs-mode-hook 'yell-at-me)
 
-;; uniquify
+
+;;; uniquify
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'reverse
@@ -291,24 +325,28 @@ predicate PRED used to filter them."
       uniquify-after-kill-buffer-p t
       uniquify-ignore-buffers-re "^\\*")
 
-;; epa
+
+;;; epa
 
 (when (require 'epa-file nil t)
   (setenv "GPG_AGENT_INFO"))
 
-;; acct
+
+;;; acct
 
 (add-path (elisp-path "acctdb"))
 (require 'acctdb)
 ;; (setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
 (setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
 
-;; tls
+
+;;; tls
 
 (require 'tls)
 (setq tls-program '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof"))
 
-;; erc
+
+;;; erc
 
 (require 'erc)
 (require 'tlh-erc)
@@ -347,30 +385,35 @@ predicate PRED used to filter them."
   (interactive)
   (next-erc-buffer t))
 
-;; tramp
+
+;;; tramp
 
 (require 'tramp)
 (setq tramp-persistency-file-name (etc-path "tramp/tramp-persistence")
       tramp-auto-save-directory (etc-path "tramp/"))
 
-;; gnus
+
+;;; gnus
 
 (setq gnus-init-file (elisp-path "tlh-gnus.el"))
 ;; (setq gnus-startup-file (elisp-path "newsrc.el"))
 
-;; midnight-mode
+
+;;; midnight-mode
 
 (require 'midnight)
 (midnight-delay-set 'midnight-delay "7:00AM")
 
-;; ansi-term
+
+;;; ansi-term
 
 (setq ansi-term-color-vector [unspecified "black" "red3" "lime green" "yellow3"
                                           "DeepSkyBlue3" "magenta3" "cyan3" "white"]
       term-default-fg-color  "Grey"
       term-default-bg-color  "Grey15")
 
-;; paredit
+
+;;; paredit
 
 (add-path (site-path "paredit"))
 (autoload 'paredit-mode "paredit" nil t)
@@ -378,13 +421,15 @@ predicate PRED used to filter them."
 ;; (add-hook 'lisp-mode-hook (lambda () (paredit-mode t)))
 ;; (add-hook 'clojure-mode-hook (lambda () (paredit-mode t)))
 
-;; js2-mode
+
+;;; js2-mode
 
 (add-path (site-path "js2-mode"))
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 
-;; slime
+
+;;; slime
 
 (setq slime-lisp-implementations
       `((sbcl ("/usr/local/bin/sbcl" "--core" ,(etc-path "sbcl.core-for-slime")))
@@ -413,7 +458,19 @@ predicate PRED used to filter them."
 (when (featurep 'slime-autodoc)
   (unload-feature 'slime-autodoc t))
 
-;; clojure-mode
+;; Override slime-repl-show-maximum-output
+
+(fset 'original-slime-repl-show-maximum-output
+      (symbol-function 'slime-repl-show-maximum-output))
+
+(defvar slime-repl-show-maximum-output nil)
+
+(defun slime-repl-show-maximum-output ()
+  (when slime-repl-show-maximum-output
+    (original-slime-repl-show-maximum-output)))
+
+
+;;; clojure-mode
 
 (add-path (site-path "clojure-mode"))
 ;; (autoload 'clojure-mode "clojure-mode" nil t)
@@ -437,32 +494,37 @@ predicate PRED used to filter them."
 
 (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup)
 
-;; markdown-mode
+
+;;; markdown-mode
 
 (add-path (site-path "markdown-mode"))
 (autoload 'markdown-mode "markdown-mode.el"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\|\\.mdwn\\|\\.mdt" . markdown-mode))
 
-;; magit
+
+;;; magit
 
 (add-path (site-path "magit"))
 (autoload 'magit-status "magit" nil t)
 
-;; jd-el
+
+;;; jd-el
 
 (add-path (site-path "jd-el"))
 (autoload 'rainbow-mode "rainbow-mode" nil t)
 (autoload 'google-maps "google-maps" nil t)
 
-;; url vars
+
+;;; url vars
 
 (defvar strict-url-regexp "https?://")
 (defvar permissive-url-regexp "\\(https?://\\)?\\(www\\.\\)?.+\\....?")
 (defvar google-search-string "http://www.google.com/search?q=")
 (defvar google-lucky-search-string "http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=")
 
-;; w3m
+
+;;; w3m
 
 (add-path (site-path "w3m"))
 
@@ -480,7 +542,8 @@ predicate PRED used to filter them."
   (w3m-goto-url-new-session
    (concat google-lucky-search-string "site:emacswiki.org+" topic)))
 
-;; browse-url
+
+;;; browse-url
 
 (defun tlh-encode-url (url)
   (browse-url-url-encode-chars url "[,)$]\")."))
@@ -521,50 +584,82 @@ predicate PRED used to filter them."
   (interactive (mbq-symbol-at-point "Emacswiki search: "))
   (tlh-google-search t "site:emacswiki.org" terms))
 
-;; google-define
+
+;;; google-define
 
 (add-path (site-path "google-define"))
 (require 'google-define)
 
-;; yaoddmuse
+
+;;; yaoddmuse
 
 (add-path (site-path "yaoddmuse"))
 (require 'yaoddmuse)
 (setq yaoddmuse-username "tlh"
       yaoddmuse-directory (etc-path "yaoddmuse/"))
 
-;; ;; fuzzy
+
+;; ;;; fuzzy
 ;; (add-path (site-path "fuzzy"))
 ;; (require 'fuzzy)
 
-;; emms
+
+;;; emms
 
 (require 'tlh-emms)
 
-;; undo-tree
+
+;;; undo-tree
 
 (add-path (site-path "undo-tree"))
 (require 'undo-tree)
 (global-undo-tree-mode)
 
-;; zone
+
+;;; zone
 
 (require 'zone)
 (zone-when-idle -1)
 
-;; malyon
+
+;;; malyon
 
 (add-path (site-path "malyon"))
 
 (require 'malyon)
 
-;; goto-last-change
+
+;;; goto-last-change
 
 (add-path (site-path "goto-last-change"))
 (require 'goto-last-change)
 
-;; provide
+
+;;; edit-server
+
+;; (defun edit-server-backup ()
+;;   (let ((file (join-string (split-string (current-time-string)) "-")))
+;;     (write-region (point-min) (point-max)
+;;                   (etc-path (format "edit-server-backups/%s" file)))))
+
+(defun edit-server-backup ()
+  (push (buffer-string) foo))
+
+;; (kill-ring-save (point-min) (point-max)))
+
+(when window-system
+  (add-path (site-path "edit-server"))
+  (require 'edit-server)
+  (setq edit-server-new-frame nil)
+  (add-hook 'edit-server-done-hook 'edit-server-backup)
+  (or (process-status "edit-server")
+      (edit-server-start))
+  t)
+
+
+;;; provide
 
 (provide 'tlh-mode)
+
 
 ;;; tlh-mode.el ends here

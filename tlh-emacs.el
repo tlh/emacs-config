@@ -4,17 +4,14 @@
   (with-no-warnings
     (byte-compile-disable-warning 'cl-functions)))
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl)
+
+(require 'tlh-util)
 
 (defvar home-dir
   (case system-type
     (darwin "/Users/luke/")
     ((linux gnu/linux) "/home/luke/")))
-
-(defmacro defpathfn (name path)
-  `(defun ,name (&optional sub)
-     (expand-file-name (concat ,path (or sub "")))))
 
 (defpathfn home-path     home-dir)
 (defpathfn emacs-path   (home-path  "emacs/"))
@@ -24,13 +21,8 @@
 (defpathfn init-path    (elisp-path "init/"))
 (defpathfn private-path (elisp-path "private/"))
 
-(defun add-path (path)
-  (add-to-list 'load-path path))
-
-(defun add-paths (&rest paths)
-  (mapc 'add-path paths))
-
-(add-paths (elisp-path "tlh-util/") (init-path) (private-path))
+(add-paths (init-path)
+           (private-path))
 
 (mapc 'require '(tlh-util
                  tlh-init
