@@ -27,10 +27,12 @@
 
 ;;; show-paren-mode
 
-(show-paren-mode 1)
 (setq show-paren-delay                  0.0
       show-paren-ring-bell-on-mismatch  t
       show-paren-style                 'parenthesis)
+
+(show-paren-mode 1)
+
 
 ;;; tlh-notify
 
@@ -431,32 +433,36 @@ predicate PRED used to filter them."
 
 ;;; slime
 
-(setq slime-lisp-implementations
-      `((sbcl ("/usr/local/bin/sbcl" "--core" ,(etc-path "sbcl.core-for-slime")))
-        (clozure ("/usr/bin/dx86cl64"))))
-
 (add-path (site-path "slime"))
 
 (require 'slime-autoloads)
 (require 'slime)
 
-;; other contribs: slime-references slime-scratch
-;;                 slime-editing-commands slime-repl
-;;                 inferior-slime-mode
+(slime-setup '(slime-asdf
+               slime-banner
+               slime-repl
+               slime-editing-commands
+               slime-fancy-inspector
+               slime-fuzzy
+               slime-presentations
+               slime-scratch
+               slime-references
+               slime-package-fu
+               slime-fontifying-fu
+               ))
 
-(slime-setup '(slime-fancy slime-asdf slime-banner))
-
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+(setq slime-protocol-version 'ignore
+      slime-lisp-implementations
+      `((sbcl ("/usr/local/bin/sbcl" "--core" ,(etc-path "sbcl.core-for-slime")))
+        (clozure ("/usr/bin/dx86cl64"))))
 
 (defun define-slime-keys ()
   (fill-keymap slime-mode-map
                "C-M-:"     'slime-interactive-eval
                "C-c C-e"   'slime-eval-last-expression))
 
+(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'slime-mode-hook 'define-slime-keys)
-
-(when (featurep 'slime-autodoc)
-  (unload-feature 'slime-autodoc t))
 
 ;; Override slime-repl-show-maximum-output
 

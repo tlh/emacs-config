@@ -1,4 +1,4 @@
-;; defkeymaps
+;;; defkeymaps
 
 (defkeymap buffer-map
   "C-e"              'eval-buffer
@@ -9,6 +9,7 @@
   "C-z"              'inhibit-backup-of-buffer
   )
 
+
 (defkeymap file-map
   "C-c"              'file-cache-minibuffer-complete
   "C-l"              'load-file
@@ -18,10 +19,12 @@
   "C-s"              'ido-sudo-find-file
   )
 
+
 (defkeymap directory-map
   "C-r"              'byte-recompile-directory
   "C-m"              'make-directory
   )
+
 
 (defkeymap workgroups-map
   "b"                'workgroups-ido-switch
@@ -43,6 +46,7 @@
   "S-C-r"            'workgroups-switch
   )
 
+
 (defkeymap region-map
   "C-k"              'kill-whole-paragraph
   "C-s"              'save-paragraph
@@ -54,6 +58,7 @@
   "C-j"              (cmd (kill-paragraph-append-to-file junk-file))
   "C-i"              'indent-paragraph
   )
+
 
 (defkeymap emms-map
   "C-SPC"            'emms-pause
@@ -72,13 +77,16 @@
   "C-p C-l"          'emms-playlist-mode-load-playlist
   )
 
+
 (defkeymap shell-map
-  "C-e"              'eshell
-  "C-s"              'shell
-  "C-t"              'term
   "C-a"              'ansi-term
+  "C-e"              'eshell
+  "C-h"              'shell
   "C-i"              'ielm
+  "C-s"              'slime-connect
+  "C-t"              'term
   )
+
 
 (defkeymap mode-map
   "C-a"              'auto-fill-mode
@@ -103,10 +111,12 @@
   "C-z"              'zone
   )
 
+
 (defkeymap launch-map
   "C-g"              'gnus
   "C-w"              'w3m
   )
+
 
 (defkeymap games-map
   "C-d"              'doctor
@@ -117,6 +127,7 @@
   "C-u"              'dunnet
   )
 
+
 (defkeymap erc-map
   "C-b"              'switch-to-erc-buffer
   "C-S-b"            'erc-iswitchb
@@ -124,6 +135,7 @@
   "C-n"              'next-erc-buffer
   "C-p"              'prev-erc-buffer
   )
+
 
 (defkeymap browse-map
   "C-b"              'browse-url-at-point
@@ -136,6 +148,7 @@
   "C-z"              (cmd (browse-url "http://www.zombo.com"))
   )
 
+
 (defkeymap w3m-map
   "C-l"              'w3m-lucky-search-new-session
   "C-o"              'w3m-view-this-url-new-session
@@ -144,19 +157,23 @@
   "C-w"              'w3m-emacswiki-new-session
   )
 
+
 (defkeymap org-map
   "C-a"              'org-agenda
   "C-l"              'org-store-link
   )
+
 
 (defkeymap acct-map
   "C-a"              'acctdb-display-accounts
   "C-c"              'acctdb-create-entry
   )
 
+
 (defkeymap yaoddmuse-map
   "C-d"              'yaoddmuse-edit-default
   )
+
 
 (defkeymap command-root-map
   "C-a"              acct-map
@@ -169,29 +186,33 @@
   "C-i"              erc-map
   "C-j"              browse-map
   "C-m"              mode-map
+  "C-n"              shell-map
   "C-o"              org-map
   "C-p"              launch-map
-  "C-s"              shell-map
   "C-u"              w3m-map
   "C-v"              emms-map
   "C-x"              workgroups-map
   "C-y"              yaoddmuse-map
   )
 
-;; fill-keymaps
+
+;;; fill-keymaps
 
 (fill-keymap dired-mode-map
              "C-c w"            'wdired-change-to-wdired-mode
              )
 
+
 (fill-keymap text-mode-map
              "C-M-q"            'unfill-paragraph
              )
+
 
 (fill-keymap isearch-mode-map
              "M-h"              isearch-help-map
              "C-h"              'isearch-delete-char
              )
+
 
 (fill-keymap lisp-mode-shared-map
              "M-."              'find-function-at-point
@@ -202,6 +223,7 @@
              "C-c C-j"          'list-indent
              "C-S-h"            'mark-list
              )
+
 
 (fill-keymap help-map
              "f"                'ido-describe-function
@@ -219,6 +241,7 @@
              "C-i"              'info-apropos
              )
 
+
 (fill-keymap ctl-x-map
              "p"                'message-point
              "C-u"              'untabify
@@ -235,11 +258,13 @@
              ;; "C-c"              'save-buffers-kill-terminal
              )
 
+
 (fill-keymap mode-specific-map
              "]"                'close-all-parens
              "s"                'slime-selector
              "C-s C-s"          (cmd (slime-connect "localhost" 4005))
              )
+
 
 (fill-keymap global-map
 
@@ -269,9 +294,11 @@
              "M-+"              (cmd (inc-transparency 2))
              "C-x C-\\"         'goto-last-change
 
+
              ;; Hyper
 
              "H-k"              'kill-whole-line
+
 
              ;; quickkeys
 
@@ -284,43 +311,16 @@
              "C-M-8"            'refresh-frame
              "C-M-9"            (cmd (checkdoc-current-buffer t))
 
-             ;; buffers
 
-             ;; "C-s-h"            'previous-buffer
-             ;; "C-s-l"            'next-buffer
-             ;; "C-s-j"            'bury-buffer
-             ;; "C-s-k"            (cmd (kill-buffer (current-buffer)))
+             ;; buffers
 
              "C-H-h"            'previous-buffer
              "C-H-l"            'next-buffer
              "C-H-j"            'bury-buffer
              "C-H-k"            (cmd (kill-buffer (current-buffer)))
 
-             ;; windows
 
-             ;; "C-s-f"            'windmove-right
-             ;; "C-s-b"            'windmove-left
-             ;; "C-s-n"            'windmove-down
-             ;; "C-s-p"            'windmove-up
-             ;; "C-s-e"            (cmd (other-window  1))
-             ;; "C-s-a"            (cmd (other-window -1))
-             ;; "C-s-0"            'delete-window
-             ;; "C-s-1"            'delete-other-windows
-             ;; "C-s-2"            'split-window-vertically
-             ;; "C-s-3"            'split-window-horizontally
-             ;; "C-s-4"            'window-configuration-to-register
-             ;; "C-s-o"            'scroll-left
-             ;; "C-s-y"            'scroll-right
-             ;; "C-s-u"            'scroll-up
-             ;; "C-s-i"            'scroll-down
-             ;; "C-S-s-n"          'inc-window-height
-             ;; "C-S-s-p"          'dec-window-height
-             ;; "C-S-s-f"          'inc-window-width
-             ;; "C-S-s-b"          'dec-window-width
-             ;; "C-s-<up>"         'inc-window-height
-             ;; "C-s-<down>"       'dec-window-height
-             ;; "C-s-<right>"      'inc-window-width
-             ;; "C-s-<left>"       'dec-window-width
+             ;; windows
 
              "C-H-f"            'windmove-right
              "C-H-b"            'windmove-left
@@ -346,27 +346,30 @@
              "C-H-<right>"      'inc-window-width
              "C-H-<left>"       'dec-window-width
 
-             ;; workgroups
 
-             ;; "C-s-s"            'workgroups-update
-             ;; "C-s-,"            'workgroups-previous
-             ;; "C-s-."            'workgroups-next
+             ;; frames
+
+             "C-M-S-h"          (cmd (other-frame -1))
+             "C-M-S-l"          (cmd (other-frame  1))
+             "C-M-S-k"          'delete-frame
+             "C-M-S-m"          'make-frame
+             "C-M-S-r"          'refresh-frame
+
+
+             ;; workgroups
 
              "C-H-s"            'workgroups-update
              "C-H-,"            'workgroups-previous
              "C-H-."            'workgroups-next
 
-             ;; moving point
 
-             ;; "s-n"              'pager-down
-             ;; "s-p"              'pager-up
-             ;; "s-N"              (cmd (pager-down 5))
-             ;; "s-P"              (cmd (pager-up   5))
+             ;; moving point
 
              "H-n"              'pager-down
              "H-p"              'pager-up
              "H-N"              (cmd (pager-down 5))
              "H-P"              (cmd (pager-up   5))
+
 
              ;; transposing
 
@@ -380,10 +383,12 @@
              "M-p"              'transpose-paragraphs
              "M-P"              'backward-transpose-paragraphs
 
+
              ;; fn keys
 
              "<f1>"             'info-apropos
              "<f2>"             'man
+             "<f5>"             'slime-connect
              "<f7>"             'emms-previous
              "<f8>"             'emms-pause
              "<f9>"             'emms-next
@@ -409,18 +414,18 @@
              "C-M-<f2>"         'describe-copying
              "C-M-<f3>"         'fortune
 
-             ;; erc
 
-             ;; "C-s-["            'prev-erc-buffer
-             ;; "C-s-]"            'next-erc-buffer
+             ;; erc
 
              "C-H-["            'prev-erc-buffer
              "C-H-]"            'next-erc-buffer
 
              )
 
-;; provide
+
+;;; provide
 
 (provide 'tlh-keys)
 
-;; tlh-keys.el ends here
+
+;;; tlh-keys.el ends here
