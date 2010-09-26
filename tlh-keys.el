@@ -17,6 +17,7 @@
   "C-o"              'ido-find-file-other-window
   "C-r"              'ido-recentf-find-file
   "C-s"              'ido-sudo-find-file
+  "C-x"              'recover-this-file
   )
 
 
@@ -72,9 +73,11 @@
   "C-s"              'emms-show
   "C-t"              'emms-play-directory-tree
   "C-x"              'emms-play-find
-  "C-p C-n"          'emms-playlist-new
-  "C-p C-s"          'emms-playlist-save
   "C-p C-l"          'emms-playlist-mode-load-playlist
+  "C-p C-n"          'emms-playlist-new
+  "C-p C-p"          'emms-play-playlist
+  "C-p C-s"          'emms-playlist-save
+  "C-p C-t"          'emms-add-playlist-directory-tree
   )
 
 
@@ -96,14 +99,16 @@
   "C-f"              'fundamental-mode
   "C-g"              'workgroups-mode
   "C-i"              'lisp-interaction-mode
-  "C-k"              'markdown-mode
+  "C-j"              'markdown-mode
+  "C-k"              'kvdb-mode
   "C-l"              'lisp-mode
   "C-m"              'magit-status
   "C-o"              'org-mode
   "C-p"              'paredit-mode
   "C-P"              'show-paren-mode
-  "C-r"              'rainbow-mode
-  "C-s"              'recs-mode
+  "C-r C-a"          'rainbow-mode
+  "C-r C-e"          'recs-mode
+  "C-s"              'slime-mode
   "C-t"              'text-mode
   "C-u"              'toggle-truncate-lines
   "C-w"              'whitespace-mode
@@ -164,9 +169,16 @@
   )
 
 
-(defkeymap acct-map
-  "C-a"              'acctdb-display-accounts
-  "C-c"              'acctdb-create-entry
+(defkeymap kvdb-map
+  ;; "C-a"              'kvdb-add-record-cmd
+  ;; "C-d"              'kvdb-delete-records
+  ;; "C-f"              'kvdb-load-db-cmd
+  ;; "C-g"              'kvdb-get-value-cmd
+  ;; "C-o"              'kvdb-search-cmd
+  ;; "C-s"              'kvdb-save-db-cmd
+  "C-t"              'kvdb-table-mode
+  ;; "C-u"              'kvdb-set-value-cmd
+  ;; "C-v"              'kvdb-display-records
   )
 
 
@@ -175,8 +187,18 @@
   )
 
 
+(defkeymap breadcrumbs-map
+  "C-SPC"            'bc-set
+  "C-p"              'bc-previous
+  "C-n"              'bc-next
+  "C-b"              'bc-local-previous
+  "C-f"              'bc-local-next
+  "C-c"              'bc-goto-current
+  "C-l"              'bc-list
+  )
+
+
 (defkeymap command-root-map
-  "C-a"              acct-map
   "C-b"              buffer-map
   "C-c"              region-map
   "C-d"              directory-map
@@ -185,6 +207,8 @@
   "C-h"              help-map
   "C-i"              erc-map
   "C-j"              browse-map
+  "C-k"              kvdb-map
+  "C-l"              breadcrumbs-map
   "C-m"              mode-map
   "C-n"              shell-map
   "C-o"              org-map
@@ -293,7 +317,7 @@
              "M-_"              (cmd (dec-transparency 2))
              "M-+"              (cmd (inc-transparency 2))
              "C-x C-\\"         'goto-last-change
-
+             "C-\""             'delete-surrounding-whitespace
 
              ;; Hyper
 
@@ -331,12 +355,13 @@
              "C-H-0"            'delete-window
              "C-H-1"            'delete-other-windows
              "C-H-2"            'split-window-vertically
+
              "C-H-3"            'split-window-horizontally
              "C-H-4"            'window-configuration-to-register
-             "C-H-o"            'scroll-left
-             "C-H-y"            'scroll-right
-             "C-H-u"            'scroll-up
-             "C-H-i"            'scroll-down
+             "C-H-o"            (cmd (scroll-left  5 0))
+             "C-H-y"            (cmd (scroll-right 5 0))
+             "C-H-u"            (cmd (scroll-up    5))
+             "C-H-i"            (cmd (scroll-down  5))
              "C-H-S-n"          'inc-window-height
              "C-H-S-p"          'dec-window-height
              "C-H-S-f"          'inc-window-width

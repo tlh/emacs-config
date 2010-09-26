@@ -1,4 +1,7 @@
-;;; emms config
+;;;
+;;;   emms config
+;;;
+
 
 (add-paths (site-path  "emms/lisp")
            (elisp-path "emms-info-id3v2"))
@@ -16,7 +19,7 @@
 (require 'emms-cache)
 (require 'emms-browser)
 
-;; utility functions
+;;; utility functions
 
 (defalias 'current-track 'emms-playlist-current-selected-track)
 
@@ -28,7 +31,7 @@
             (emms-track-get track 'info-album)
             (emms-track-get track 'info-title))))
 
-;; seek slider
+;;; seek slider
 
 (defvar emms-player-output-buffer nil
   "Output buffer for the emms player process")
@@ -44,7 +47,7 @@
       (funcall emms-track-position-function)
     (error (message "Error in `emms-track-position-function'."))))
 
-;; Redefine `emms-player-simple-start' to get a process buffer
+;;; Redefine `emms-player-simple-start' to get a process buffer
 (defun emms-player-simple-start (filename player cmdname params)
   (let ((process (apply 'start-process
                         emms-player-simple-process-name
@@ -80,7 +83,7 @@
   (interactive)
   (emms-slider-seek (or secs emms-seek-seconds)))
 
-;; mplayer
+;;; mplayer
 
 (defvar emms-mplayer-volume-increment 2
   "Default mplayer volume increment.")
@@ -143,7 +146,31 @@
   (emms-mplayer-offset-volume
    (or inc emms-mplayer-volume-increment)))
 
-;; settings
+
+;;; force track recaching
+
+(defun emms-cache-delete-dir (dir)
+  (interactive
+   (list
+    (read-directory-name "DDirectory: " emms-source-file-default-directory)))
+  (dolist (path (directory-files dir t))
+    (emms-cache-del path)))
+
+(defun emms-playlist-delete-file-from-cache ()
+  (interactive)
+  (let* ((track (emms-playlist-track-at (point)))
+         (path  (emms-track-get track 'name)))
+    (unless track (error "No track at point."))
+    (emms-cache-del path)
+    (next-line)
+    (message "Deleted %S from cache." path)))
+
+(fill-keymap emms-playlist-mode-map
+             "M-k"   'emms-playlist-delete-file-from-cache
+             "C-M-k" 'emms-cache-delete-dir)
+
+
+;;; settings
 
 (defpathfn emms-path (etc-path "emms/"))
 
@@ -163,6 +190,10 @@
 
 (emms-cache 1)
 
+
+;;; provide
+
 (provide 'tlh-emms)
+
 
 ;;; tlh-emms.el ends here

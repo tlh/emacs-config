@@ -29,7 +29,7 @@
 
 (setq show-paren-delay                  0.0
       show-paren-ring-bell-on-mismatch  t
-      show-paren-style                 'parenthesis)
+      show-paren-style                  'parenthesis)
 
 (show-paren-mode 1)
 
@@ -115,6 +115,12 @@
 
 (require 'windmove)
 (setq windmove-wrap-around t)
+
+
+;; ;;; framemove
+;; (add-path (site-path "framemove"))
+;; (require 'framemove)
+;; (setq framemove-hook-into-windmove t)
 
 
 ;;; browse-kill-ring
@@ -334,13 +340,13 @@ predicate PRED used to filter them."
   (setenv "GPG_AGENT_INFO"))
 
 
-;;; acctdb
+;;; kvdb
 
-(add-path (elisp-path "acctdb"))
-(require 'acctdb)
-;; (setq acctdb-file (expand-file-name "~/tcvol1/.accts.gpg"))
-(setq acctdb-file (expand-file-name "~/tcvol1/.accts"))
-
+(add-path (elisp-path "kvdb"))
+(require 'kvdb)
+(setq kvdb-completing-read-fn 'ido-completing-read)
+(kvdb-mode t)
+(kvdb-load-db "~/tcvol1/.accts")
 
 ;;; tls
 
@@ -355,11 +361,11 @@ predicate PRED used to filter them."
 
 (defun erc-freenode-ssl-connect ()
   (interactive)
-  (erc-tls :server "irc.freenode.net"
-           :port 7070
-           :nick "thunk"
-           :full-name "thunk"
-           :password (acctdb-get-pass "freenode")))
+  (erc-tls :server     "irc.freenode.net"
+           :port       7070
+           :nick       "thunk"
+           :full-name  "thunk"
+           :password   (kvdb-get-val "Accounts" "9" :password)))
 
 (defun erc-text-matched (match-type nick msg)
   (case match-type
@@ -441,6 +447,7 @@ predicate PRED used to filter them."
 (slime-setup '(slime-asdf
                slime-banner
                slime-repl
+               ;; slime-autodoc
                slime-editing-commands
                slime-fancy-inspector
                slime-fuzzy
@@ -458,8 +465,9 @@ predicate PRED used to filter them."
 
 (defun define-slime-keys ()
   (fill-keymap slime-mode-map
-               "C-M-:"     'slime-interactive-eval
-               "C-c C-e"   'slime-eval-last-expression))
+               "C-M-:"          'slime-interactive-eval
+               "C-c C-e"        'slime-eval-last-expression
+               "C-z C-b C-e"    'slime-eval-buffer))
 
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'slime-mode-hook 'define-slime-keys)
@@ -658,6 +666,18 @@ predicate PRED used to filter them."
   (or (process-status "edit-server")
       (edit-server-start))
   t)
+
+
+;;; breadcrumb
+
+(add-path (site-path "breadcrumb"))
+(require 'breadcrumb)
+
+
+;;; ascii-table
+
+(add-path (site-path "ascii-table"))
+(require 'ascii-table)
 
 
 ;;; provide

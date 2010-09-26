@@ -16,7 +16,8 @@
   (interactive)
   (call-process "osx-toggle-show-hidden-files"))
 
-;; general settings
+
+;;; general settings
 
 (setq mac-command-modifier         'meta
       ;; mac-option-modifier          'super
@@ -39,8 +40,10 @@
       get-volume-function          'osx-get-volume
       )
 
-;; provide
+
+;;; provide
 
 (provide 'tlh-osx)
+
 
 ;;; tlh-osx.el ends here
