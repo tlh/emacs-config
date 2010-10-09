@@ -37,6 +37,7 @@
   "C-k"              (cmd (workgroups-kill))
   "C-n"              'workgroups-next
   "C-p"              'workgroups-previous
+  "C-q"              'workgroups-rename
   "C-r"              'workgroups-revert
   "C-s"              'workgroups-save
   "C-u"              'workgroups-update
@@ -93,6 +94,7 @@
 
 (defkeymap mode-map
   "C-a"              'auto-fill-mode
+  "C-b"              'toggle-debug-on-error
   "C-c"              'clojure-mode
   "C-d"              'eldoc-mode
   "C-e"              'emacs-lisp-mode
@@ -170,13 +172,17 @@
 
 
 (defkeymap kvdb-map
+  "k"                'kvdb-close-cmd
+  "C-f"              'kvdb-load-cmd
+  "C-n"              'kvdb-new-cmd
+  "C-s"              'kvdb-save-cmd
+  "C-t"              'kvdb-table-mode
   ;; "C-a"              'kvdb-add-record-cmd
   ;; "C-d"              'kvdb-delete-records
   ;; "C-f"              'kvdb-load-db-cmd
   ;; "C-g"              'kvdb-get-value-cmd
   ;; "C-o"              'kvdb-search-cmd
   ;; "C-s"              'kvdb-save-db-cmd
-  "C-t"              'kvdb-table-mode
   ;; "C-u"              'kvdb-set-value-cmd
   ;; "C-v"              'kvdb-display-records
   )

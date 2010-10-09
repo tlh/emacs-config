@@ -251,19 +251,14 @@ predicate PRED used to filter them."
       dired-auto-revert-buffer            t
       wdired-allow-to-change-permissions  t)
 
+(fill-keymap dired-mode-map "E" 'emms-play-dired)
+
 (command-enable 'dired-find-alternate-file)
 
 
 ;;; eshell
 
 (defpathfn eshell-path (etc-path "eshell/"))
-
-;; (defun tlh-eshell-prompt-fn ()
-;;   (format "[%s@%s:%s]%s "
-;;           user-login-name
-;;           system-name
-;;           (abbreviate-file-name (eshell/pwd))
-;;           (if (= (user-uid) 0) "#" "$")))
 
 (defun tlh-eshell-prompt-fn ()
   (format "%s%s "
@@ -340,13 +335,20 @@ predicate PRED used to filter them."
   (setenv "GPG_AGENT_INFO"))
 
 
+;;; pickel
+
+(add-path (elisp-path "pickel"))
+(require 'pickel)
+
+
 ;;; kvdb
 
 (add-path (elisp-path "kvdb"))
 (require 'kvdb)
 (setq kvdb-completing-read-fn 'ido-completing-read)
 (kvdb-mode t)
-(kvdb-load-db "~/tcvol1/.accts")
+(kvdb-load "~/tcvol1/.accts")
+
 
 ;;; tls
 
@@ -365,7 +367,7 @@ predicate PRED used to filter them."
            :port       7070
            :nick       "thunk"
            :full-name  "thunk"
-           :password   (kvdb-get-val "Accounts" "9" :password)))
+           :password   (kvdb-get "Accounts" "/9/password")))
 
 (defun erc-text-matched (match-type nick msg)
   (case match-type

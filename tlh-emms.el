@@ -6,6 +6,9 @@
 (add-paths (site-path  "emms/lisp")
            (elisp-path "emms-info-id3v2"))
 
+
+;;; requires
+
 (require 'emms-source-file)
 (require 'emms-source-playlist)
 (require 'emms-player-simple)
@@ -19,6 +22,7 @@
 (require 'emms-cache)
 (require 'emms-browser)
 
+
 ;;; utility functions
 
 (defalias 'current-track 'emms-playlist-current-selected-track)
@@ -31,21 +35,11 @@
             (emms-track-get track 'info-album)
             (emms-track-get track 'info-title))))
 
-;;; seek slider
+
+;;; emms process buffer
 
 (defvar emms-player-output-buffer nil
   "Output buffer for the emms player process")
-
-(defvar emms-seek-slider-length 100
-  "Length of the seek slider")
-
-(defvar emms-track-position-function nil
-  "Funtion that returns the current track position as a percentage.")
-
-(defun emms-track-position ()
-  (condition-case nil
-      (funcall emms-track-position-function)
-    (error (message "Error in `emms-track-position-function'."))))
 
 ;;; Redefine `emms-player-simple-start' to get a process buffer
 (defun emms-player-simple-start (filename player cmdname params)
@@ -57,14 +51,36 @@
     (set-process-sentinel process 'emms-player-simple-sentinel))
   (emms-player-started player))
 
-(defun emms-display-track-position-slider (&optional len)
+
+;;; seek slider
+
+(defvar emms-time-length-function nil
+  "Funtion that returns the current track time length in seconds.")
+
+(defun emms-time-length ()
+  (funcall emms-time-length-function))
+
+(defvar emms-time-position-function nil
+  "Funtion that returns the current track position in seconds.")
+
+(defun emms-time-position ()
+  (funcall emms-time-position-function))
+
+(defvar emms-percentage-position-function nil
+  "Funtion that returns the current track position as a percentage.")
+
+(defun emms-percentage-position ()
+  (funcall emms-percentage-position-function))
+
+(defun emms-display-track-position-slider ()
   (interactive)
-  (aif (emms-track-position)
-       (message "     %s\n%s %%%s"
-                (tlh-emms-track-description)
-                (slider it (or len emms-seek-slider-length))
-                it)
-       (message "Nothing is currently playing.")))
+  (let ((perc (emms-percentage-position))
+        (secs (emms-time-position))
+        (len  (emms-time-length)))
+    (message "     %s\n%s %s%%  %s/%s seconds"
+             (tlh-emms-track-description)
+             (slider perc (- (frame-width) 40))
+             perc secs len)))
 
 (defun emms-slider-seek (secs)
   (interactive
@@ -82,6 +98,7 @@
 (defun emms-slider-seek-forward (&optional secs)
   (interactive)
   (emms-slider-seek (or secs emms-seek-seconds)))
+
 
 ;;; mplayer
 
@@ -113,7 +130,13 @@
   (emms-mplayer-cmd
    (format "step_property volume %s\n" step)))
 
-(defun emms-mplayer-track-position ()
+(defun emms-mplayer-time-length ()
+  (emms-mplayer-cmd "get_time_length\n" t t))
+
+(defun emms-mplayer-time-position ()
+  (emms-mplayer-cmd "get_time_pos\n" t t))
+
+(defun emms-mplayer-percentage-position ()
   (emms-mplayer-cmd "get_percent_pos\n" t t))
 
 (defun emms-mplayer-volume ()
@@ -163,6 +186,9 @@
     (unless track (error "No track at point."))
     (emms-cache-del path)
     (next-line)
+    ;; FIXME: playlist should update to show "NIL" track info
+    ;; (emms-playlist-mode-kill-track)
+    ;; (emms-playlist-track-updated track)
     (message "Deleted %S from cache." path)))
 
 (fill-keymap emms-playlist-mode-map
@@ -174,18 +200,20 @@
 
 (defpathfn emms-path (etc-path "emms/"))
 
-(setq emms-player-list                     '(emms-player-mplayer)
-      emms-playlist-default-major-mode     'emms-playlist-mode
-      emms-track-initialize-functions      '(emms-info-initialize-track)
-      emms-info-functions                  '(emms-info-id3v2 emms-info-ogginfo)
-      emms-track-description-function      'tlh-emms-track-description
-      emms-source-file-default-directory    (home-path "Music/iTunes/iTunes Media/Music/")
-      emms-directory                        (emms-path)
-      emms-cache-file                       (emms-path "cache")
-      emms-repeat-playlist                  t
-      emms-track-position-function         'emms-mplayer-track-position
-      emms-player-mplayer-parameters       '("-slave" "-quiet")
-      emms-player-output-buffer            "*mplayer*"
+(setq emms-player-list                         '(emms-player-mplayer)
+      emms-playlist-default-major-mode         'emms-playlist-mode
+      emms-track-initialize-functions          '(emms-info-initialize-track)
+      emms-info-functions                      '(emms-info-id3v2 emms-info-ogginfo)
+      emms-track-description-function          'tlh-emms-track-description
+      emms-source-file-default-directory        (home-path "Music/iTunes/iTunes Media/Music/")
+      emms-directory                            (emms-path)
+      emms-cache-file                           (emms-path "cache")
+      emms-repeat-playlist                      t
+      emms-time-length-function                'emms-mplayer-time-length
+      emms-time-position-function              'emms-mplayer-time-position
+      emms-percentage-position-function        'emms-mplayer-percentage-position
+      emms-player-mplayer-parameters           '("-slave" "-quiet")
+      emms-player-output-buffer                 "*mplayer*"
       )
 
 (emms-cache 1)

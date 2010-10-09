@@ -1,17 +1,20 @@
 ;;; core configs
 
-;; server
+
+;;; server
 
 (require 'server)
 (or (server-running-p) (server-start))
 
-;; coding system
+
+;;; coding system
 
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
 
-;; set variables
+
+;;; set variables
 
 (setq
  user-full-name                            "tlh"
@@ -58,16 +61,19 @@
  shift-select-mode                         nil
  help-window-select                        nil
  visible-cursor                            nil
+ tooltip-use-echo-area                     nil
  )
 
-;; set buffer-local variable defaults
+
+;;; set buffer-local variable defaults
 
 (setq-default
  indent-tabs-mode                          nil
  indicate-empty-lines                      nil
  cursor-type                              'box)
 
-;; turn on some modes
+
+;;; turn on some modes
 
 (global-font-lock-mode     t)
 (global-auto-revert-mode   1)
@@ -75,12 +81,15 @@
 (auto-image-file-mode      t)
 (delete-selection-mode    -1)
 (blink-cursor-mode         nil)
+(tooltip-mode              nil)
 
-;; info path
+
+;;; info path
 
 (add-to-list 'Info-default-directory-list (etc-path "info"))
 
-;; default-frame-alist
+
+;;; default-frame-alist
 
 (setq default-frame-alist
       `((font                      . "Menlo-12") ;; "DejaVu Sans Mono-12"
@@ -101,19 +110,23 @@
         (border-width              . 0)
         ))
 
-;; enable disabled commands
+
+;;; enable disabled commands
 
 (mapc 'command-enable '(set-goal-column
                         scroll-left
                         narrow-to-region
                         erase-buffer))
 
-;; seed random
+
+;;; seed random
 
 (random t)
 
-;; provide
+
+;;; provide
 
 (provide 'tlh-init)
+
 
 ;;; tlh-init.el ends here

@@ -6,6 +6,7 @@
 
 (require 'cl)
 
+(add-to-list 'load-path "~/emacs/elisp/tlh-util/")
 (require 'tlh-util)
 
 (defvar home-dir

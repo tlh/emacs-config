@@ -157,7 +157,9 @@ that sets the system volume.")))
 (defun show-volume ()
   "Display `system-volume' as a text slider in the echo area."
   (interactive)
-  (message "system:  %s Vol: %d%%" (slider system-volume) system-volume))
+  (message "system: %3d%% %s"
+           system-volume
+           (slider system-volume (- (frame-width) 17))))
 
 (defun get-volume ()
   "`get-volume-primitive' wrapper."
