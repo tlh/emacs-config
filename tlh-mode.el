@@ -1,15 +1,19 @@
 ;;; mode configs
 
 
-;;; color-theme
+;;; tlh-ido
 
-(add-path (site-path "color-theme"))
-(setq color-theme-load-all-themes nil)
-(require 'color-theme)
+(require 'tlh-ido)
 
-(add-path (elisp-path "color-themes/"))
-(require 'color-theme-thunk1)
-(add-hook 'after-init-hook 'color-theme-thunk1)
+
+;;; tlh-emms
+
+(require 'tlh-emms)
+
+
+;;; tlh-erc
+
+(require 'tlh-erc)
 
 
 ;;; tlh-sound
@@ -25,6 +29,22 @@
                  'keyboard-quit)
 
 
+;;; tlh-notify
+
+(require 'tlh-notify)
+
+
+;;; color-theme
+
+(add-path (site-path "color-theme"))
+(setq color-theme-load-all-themes nil)
+(require 'color-theme)
+
+(add-path (elisp-path "color-themes/"))
+(require 'color-theme-thunk1)
+(add-hook 'after-init-hook 'color-theme-thunk1)
+
+
 ;;; show-paren-mode
 
 (setq show-paren-delay                  0.0
@@ -32,11 +52,6 @@
       show-paren-style                  'parenthesis)
 
 (show-paren-mode 1)
-
-
-;;; tlh-notify
-
-(require 'tlh-notify)
 
 
 ;;; bbdb
@@ -135,111 +150,6 @@
 
 (require 'imenu)
 (setq imenu-auto-rescan t)
-
-
-;;; ido
-
-(when (> emacs-major-version 21)
-  (ido-mode t)
-  (ido-everywhere 1)
-  (setq ido-enable-prefix             nil
-        ido-enable-flex-matching      t
-        ido-create-new-buffer        'always
-        ido-use-filename-at-point     nil
-        ido-max-prospects             50
-        ido-use-faces                 t
-        ido-max-window-height         nil
-        ido-save-directory-list-file  (etc-path "ido.last")
-        ido-default-file-method       'selected-window
-        ido-default-buffer-method     'selected-window))
-
-(defun ido-imenu ()
-  "Query with `ido-completing-read' a symbol in the buffer's
-imenu index, then jump to that symbol's location."
-  (interactive)
-  (goto-char
-   (let ((lst (nreverse
-               (flatten-assoc-tree
-                (imenu--make-index-alist)
-                'imenu--subalist-p))))
-     (access (ido-completing-read "Symbol: " (mapcar 'car lst)) lst))))
-
-(defun ido-cache (pred &optional recalc)
-  "Create a cache of symbols from `obarray' named after the
-predicate PRED used to filter them."
-  (let ((cache (intern (concat "ido-cache-" (symbol-name pred)))))
-    (when (or recalc (not (boundp cache)))
-      (set cache nil)
-      (mapatoms (lambda (s)
-                  (when (funcall pred s)
-                    (push (symbol-name s) (symbol-value cache))))))
-    (symbol-value cache)))
-
-(defun ido-recalculate-all-caches ()
-  "Recalculate the `ido-cache' of `functionp', `commandp' and
-`boundp'."
-  (interactive)
-  (ido-cache 'commandp  t)
-  (ido-cache 'functionp t)
-  (ido-cache 'boundp    t)
-  t)
-
-(defun ido-execute-extended-command ()
-  "ido replacement for `execute-extended-command'."
-  (interactive)
-  (call-interactively
-   (intern (ido-completing-read "M-x " (ido-cache 'commandp)))))
-
-(defun ido-describe-function (&optional at-point)
-  "ido replacement for `describe-function'."
-  (interactive "P")
-  (describe-function
-   (intern
-    (ido-completing-read
-     "Describe function: "
-     (ido-cache 'functionp) nil nil
-     (aand at-point (function-called-at-point) (format "%S" it))))))
-
-(defun ido-describe-function-at-point ()
-  (interactive)
-  (ido-describe-function t))
-
-(defun ido-find-function ()
-  (interactive)
-  (find-function (intern (ido-completing-read "Function: " (ido-cache 'functionp)))))
-
-(defun ido-find-documentation-for-command ()
-  "ido replacement for `find-documentation-for-command'."
-  (interactive)
-  (Info-goto-emacs-command-node
-   (intern
-    (ido-completing-read
-     "Find documentation for command: " (ido-cache 'commandp)))))
-
-(defun ido-describe-variable (&optional at-point)
-  "ido replacement for `describe-variable'."
-  (interactive "P")
-  (describe-variable
-   (intern
-    (ido-completing-read
-     "Describe variable: "
-     (ido-cache 'boundp) nil nil
-     (aand at-point (thing-at-point 'symbol) (format "%s" it))))))
-
-(defun ido-describe-variable-at-point ()
-  (interactive)
-  (ido-describe-variable t))
-
-(defun ido-sudo-find-file (&optional arg)
-  (interactive "p")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-(defun ido-recentf-find-file ()
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file (find-file file))))
 
 
 ;;; dired
@@ -354,46 +264,6 @@ predicate PRED used to filter them."
 
 (require 'tls)
 (setq tls-program '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof"))
-
-
-;;; erc
-
-(require 'erc)
-(require 'tlh-erc)
-
-(defun erc-freenode-ssl-connect ()
-  (interactive)
-  (erc-tls :server     "irc.freenode.net"
-           :port       7070
-           :nick       "thunk"
-           :full-name  "thunk"
-           :password   (kvdb-get "Accounts" "/9/password")))
-
-(defun erc-text-matched (match-type nick msg)
-  (case match-type
-    (current-nick
-     (unless (string-match "^\\** Users on #" msg)
-       (notify "ERC:" msg)))
-    (pal
-     (let ((nick (car (split-string nick "!"))))
-       (when (member nick erc-pals)
-         (message (format "%s: %s" nick msg)))))))
-
-(add-hook 'erc-text-matched-hook 'erc-text-matched)
-
-(defun switch-to-erc-buffer ()
-  (interactive)
-  (ido-buffer-internal ido-default-buffer-method nil nil nil "#"))
-
-(defun next-erc-buffer (&optional prev)
-  (interactive)
-  (aif (sort-buffer-list (erc-buffer-list))
-       (switch-to-buffer (funcall (if prev 'cprev 'cnext) (current-buffer) it))
-       (message "There are no erc buffers.")))
-
-(defun prev-erc-buffer ()
-  (interactive)
-  (next-erc-buffer t))
 
 
 ;;; tramp
@@ -618,11 +488,6 @@ predicate PRED used to filter them."
 ;; ;;; fuzzy
 ;; (add-path (site-path "fuzzy"))
 ;; (require 'fuzzy)
-
-
-;;; emms
-
-(require 'tlh-emms)
 
 
 ;;; undo-tree

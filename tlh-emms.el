@@ -175,7 +175,8 @@
 (defun emms-cache-delete-dir (dir)
   (interactive
    (list
-    (read-directory-name "DDirectory: " emms-source-file-default-directory)))
+    (read-directory-name
+     "DDirectory: " emms-source-file-default-directory)))
   (dolist (path (directory-files dir t))
     (emms-cache-del path)))
 
