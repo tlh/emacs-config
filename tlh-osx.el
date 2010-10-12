@@ -20,8 +20,6 @@
 ;;; general settings
 
 (setq mac-command-modifier         'meta
-      ;; mac-option-modifier          'super
-      ;; mac-function-modifier        'hyper
       mac-option-modifier          'hyper
       mac-function-modifier        'super
       ns-antialias-text            t

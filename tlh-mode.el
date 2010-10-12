@@ -19,6 +19,7 @@
 ;;; tlh-sound
 
 (require 'tlh-sound)
+
 (setq ring-bell-function 'pretty-ding
       volume-increment    2)
 

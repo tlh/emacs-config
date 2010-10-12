@@ -10,7 +10,7 @@
            :port       7070
            :nick       "thunk"
            :full-name  "thunk"
-           :password   (kvdb-get "Accounts" "/9/password")))
+           :password   (kvdb-get-val "Accounts" "9" "password")))
 
 (defun erc-text-matched (match-type nick msg)
   (case match-type

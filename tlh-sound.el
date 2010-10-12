@@ -47,12 +47,14 @@
 ;;    want to play sound files on error.
 ;;
 
+
 ;;; Code:
 
 (eval-when-compile
   (require 'cl))
 
-;; Customization
+
+;;; Customization
 
 (defgroup tlh-sound nil
   "A very simple sound framework."
@@ -122,6 +124,9 @@ number [0-100]."
   "Boolean for whether to play a sound on volume change."
   :type 'boolean
   :group 'tlh-sound)
+
+
+;;; functions
 
 (defun play-sound (filename)
   (condition-case nil
@@ -213,6 +218,10 @@ that sets the system volume.")))
   (set-volume (+ system-volume
                  (- (or dec volume-increment)))))
 
+
+;;; provide
+
 (provide 'tlh-sound)
+
 
 ;;; tlh-sound.el ends here

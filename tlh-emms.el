@@ -157,7 +157,9 @@
 (defun emms-mplayer-offset-volume (offset)
   (when (emms-mplayer-step-volume offset)
     (let ((vol (emms-mplayer-volume)))
-      (message "mplayer: %s Vol: %d%%" (slider vol) vol))))
+      (message "mplayer: %s Vol: %d%%"
+               (slider vol (- (frame-width) 30))
+               vol))))
 
 (defun emms-mplayer-decrease-volume (&optional dec)
   (interactive)
