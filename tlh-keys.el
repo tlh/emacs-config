@@ -27,28 +27,6 @@
   )
 
 
-(defkeymap workgroups-map
-  "b"                'workgroups-ido-switch
-  "C-a"              'workgroups-ido-add
-  "C-b"              'workgroups-ido-switch
-  "C-e"              'workgroups-show-current
-  "C-f"              'workgroups-find-file
-  "C-j"              'workgroups-bury
-  "C-k"              (cmd (workgroups-kill))
-  "C-n"              'workgroups-next
-  "C-p"              'workgroups-previous
-  "C-q"              'workgroups-rename
-  "C-r"              'workgroups-revert
-  "C-s"              'workgroups-save
-  "C-u"              'workgroups-update
-  "C-v"              'workgroups-random
-  "C-z"              'workgroups-ido-raise
-  "S-C-a"            'workgroups-add
-  "S-C-d"            'workgroups-kill
-  "S-C-r"            'workgroups-switch
-  )
-
-
 (defkeymap region-map
   "C-k"              'kill-whole-paragraph
   "C-s"              'save-paragraph
@@ -297,7 +275,6 @@
 
 
 (fill-keymap global-map
-
              "C-z"              command-root-map
              "C-h"              'backward-delete-char-untabify
              "M-w"              'kill-ring-save
@@ -328,6 +305,20 @@
              ;; Hyper
 
              "H-k"              'kill-whole-line
+
+             "H-0"              'workgroups-jump-0
+             "H-1"              'workgroups-jump-1
+             "H-2"              'workgroups-jump-2
+             "H-3"              'workgroups-jump-3
+             "H-4"              'workgroups-jump-4
+             "H-5"              'workgroups-jump-5
+             "H-6"              'workgroups-jump-6
+             "H-7"              'workgroups-jump-7
+             "H-8"              'workgroups-jump-8
+             "H-9"              'workgroups-jump-9
+
+             "H-r"              'workgroups-revert
+             "H-u"              'workgroups-update
 
 
              ;; quickkeys
@@ -390,7 +381,7 @@
              ;; workgroups
 
              "C-H-s"            'workgroups-update
-             "C-H-,"            'workgroups-previous
+             "C-H-,"            'workgroups-prev
              "C-H-."            'workgroups-next
 
 
@@ -438,7 +429,7 @@
              "M-<f5>"           'ucs-insert
              "M-<f7>"           'emms-slider-seek
              "M-<f9>"           'emms-slider-seek
-             "M-<f12>"          'current-info
+             "M-<f12>"          'workgroups-echo-time
              "C-M-<f7>"         'emms-display-track-position-slider
              "C-M-<f9>"         'emms-display-track-position-slider
              "C-M-<f1>"         'view-emacs-FAQ

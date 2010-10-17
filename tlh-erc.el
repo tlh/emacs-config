@@ -38,30 +38,17 @@
   (interactive)
   (next-erc-buffer t))
 
-(defun thunk-quit-reason (&optional reason)
-  (or reason
-      "I'm using zxvg 1.11 with GNU Emacs \
+(defun thunk-quit-reason (&optional n)
+  (nth (or n 0)
+       '("thunk"
+         "I'm using zxvg 1.11 with GNU Emacs \
 47b.1.70.3 (x512_128-statex-occuline37.2.0, \
-para-tty) of 2020.1573.28374."))
+para-tty) of 2020.1573.28374.")))
 
-(setq erc-modules                           '(autojoin
-                                              button
-                                              completion
-                                              fill
-                                              irccontrols
-                                              list
-                                              log
-                                              match
-                                              menu
-                                              move-to-prompt
-                                              netsplit
-                                              networks
-                                              noncommands
-                                              readonly
-                                              ring
-                                              services
-                                              stamp
-                                              track)
+(setq erc-modules '(autojoin button completion fill irccontrols
+                             list log match menu move-to-prompt
+                             netsplit networks noncommands
+                             readonly ring services stamp track)
       erc-autojoin-channels-alist           '(("freenode" "#emacs" "#startups" "#clojure" "##cinema"))
       erc-away-nickname                      "thunk|away"
       erc-log-channels-directory             (etc-path "erc-logs/")

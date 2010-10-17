@@ -207,12 +207,8 @@
 
 (add-path (elisp-path "workgroups-mode"))
 (require 'workgroups-mode)
-
-(setq workgroups-default-file   (etc-path "workgroups-configs")
-      workgroups-autosave       nil
-      workgroups-autoswitch     t)
-
-(workgroups-mode t)
+(workgroups-mode 1)
+(workgroups-load (etc-path "workgroups-configs"))
 
 
 ;;; recs-mode
@@ -456,7 +452,7 @@
 (defun google-search (terms)
   (interactive (list (if (region-active-p)
                          (buffer-substring (region-beginning) (region-end))
-                       (read-from-minibuffer "Query: "))))
+                       (read-from-minibuffer "Query: " (thing-at-point 'sexp)))))
   (tlh-google-search nil terms))
 
 (defun google-lucky-search (terms)
