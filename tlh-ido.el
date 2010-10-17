@@ -3,19 +3,18 @@
 ;;;
 
 
-(when (> emacs-major-version 21)
-  (ido-mode t)
-  (ido-everywhere 1)
-  (setq ido-enable-prefix             nil
-        ido-enable-flex-matching      t
-        ido-create-new-buffer        'always
-        ido-use-filename-at-point     nil
-        ido-max-prospects             50
-        ido-use-faces                 t
-        ido-max-window-height         nil
-        ido-save-directory-list-file  (etc-path "ido.last")
-        ido-default-file-method       'selected-window
-        ido-default-buffer-method     'selected-window))
+(ido-mode t)
+(ido-everywhere 1)
+(setq ido-enable-prefix             nil
+      ido-enable-flex-matching      t
+      ido-create-new-buffer        'always
+      ido-use-filename-at-point     nil
+      ido-max-prospects             50
+      ido-use-faces                 t
+      ido-max-window-height         nil
+      ido-save-directory-list-file  (etc-path "ido.last")
+      ido-default-file-method       'selected-window
+      ido-default-buffer-method     'selected-window)
 
 (defun ido-imenu ()
   "Query with `ido-completing-read' a symbol in the buffer's
