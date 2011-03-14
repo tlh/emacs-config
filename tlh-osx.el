@@ -38,6 +38,8 @@
       get-volume-function          'osx-get-volume
       )
 
+(set-frame-parameter nil 'font "Menlo-12")
+
 
 ;;; provide
 

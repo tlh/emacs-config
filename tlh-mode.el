@@ -35,15 +35,44 @@
 (require 'tlh-notify)
 
 
+;;; workgroups
+
+(global-unset-key (kbd "C-z"))
+
+(add-path (elisp-path "workgroups"))
+
+(require 'workgroups)
+
+(setq
+ ;; wg-prefix-key             (kbd "C-z C-x")
+ wg-prefix-key             (kbd "C-c w")
+ wg-frame-morph-hsteps     9
+ wg-frame-morph-vsteps     3
+ )
+
+(workgroups-mode t)
+
+;; (and (eq window-system 'ns)
+;;      (fboundp `ns-toggle-fullscreen)
+;;      (ns-toggle-fullscreen))
+
+(wg-load (etc-path "workgroups-configs"))
+
+
 ;;; color-theme
 
-(add-path (site-path "color-theme"))
-(setq color-theme-load-all-themes nil)
-(require 'color-theme)
+(when window-system
+  (add-path (site-path "color-theme"))
+  (setq color-theme-load-all-themes nil)
+  (require 'color-theme)
+  (add-path (elisp-path "color-themes/"))
+  (require 'color-theme-thunk1)
+  (add-hook 'after-init-hook 'color-theme-thunk1))
 
-(add-path (elisp-path "color-themes/"))
-(require 'color-theme-thunk1)
-(add-hook 'after-init-hook 'color-theme-thunk1)
+
+;;; org
+
+(setq org-hide-leading-stars t)
 
 
 ;;; show-paren-mode
@@ -113,7 +142,7 @@
 
 (add-hooks 'emacs-lisp-mode-hook
            'turn-on-eldoc-mode
-           'remove-elc-on-save
+           ;; 'remove-elc-on-save
            'coding-hook
            'unicode-lambdas
            'cleanup-buffer-on-save)
@@ -201,14 +230,6 @@
         eshell-banner-message              " -={ Fuck Off }=-\n\n"))
 
 (add-hook 'eshell-load-hook 'tlh-setup-eshell)
-
-
-;;; workgroups
-
-(add-path (elisp-path "workgroups-mode"))
-(require 'workgroups-mode)
-(workgroups-mode 1)
-(workgroups-load (etc-path "workgroups-configs"))
 
 
 ;;; recs-mode

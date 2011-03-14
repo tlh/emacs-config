@@ -9,8 +9,8 @@
 
 ;;; coding system
 
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
+;; (set-terminal-coding-system 'utf-8)
+;; (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system       'utf-8)
 
 
@@ -68,6 +68,7 @@
 ;;; set buffer-local variable defaults
 
 (setq-default
+ fill-column                               80
  indent-tabs-mode                          nil
  indicate-empty-lines                      nil
  cursor-type                              'box)
@@ -107,7 +108,7 @@
         (right-fringe              . 4)
         (left-fringe               . 4)
         (internal-border-width     . 2)
-        (border-width              . 0)
+        ;; (border-width              . 0)
         ))
 
 

@@ -64,6 +64,11 @@ predicate PRED used to filter them."
      (aand at-point (function-called-at-point)
            (symbol-name it))))))
 
+(defun ido-yank ()
+  "Select a kill to yank with `ido-completing-read'."
+  (interactive)
+  (insert-for-yank (ido-completing-read "Select kill: " kill-ring)))
+
 (defun ido-describe-function-at-point ()
   (interactive)
   (ido-describe-function t))

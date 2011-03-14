@@ -4,25 +4,46 @@
 
 (require 'erc)
 
-(defun erc-freenode-ssl-connect ()
-  (interactive)
-  (erc-tls :server     "irc.freenode.net"
-           :port       7070
+
+;;; erc-highlight-nicknames
+
+(add-path (site-path "erc-highlight-nicknames"))
+(require 'erc-highlight-nicknames)
+(add-to-list 'erc-modules 'highlight-nicknames)
+(erc-update-modules)
+
+
+;;; connection command
+
+(defun erc-freenode-connect (&optional ssl)
+  (interactive "P")
+  (funcall (if ssl 'erc-tls 'erc)
+           :server     "irc.freenode.net"
+           :port       (if ssl 7070 6667)
            :nick       "thunk"
            :full-name  "thunk"
            :password   (kvdb-get-val "Accounts" "9" "password")))
+
+
+;;; text matched hook
 
 (defun erc-text-matched (match-type nick msg)
   (case match-type
     (current-nick
      (unless (string-match "^\\** Users on #" msg)
        (notify "ERC:" msg)))
+    (keyword (notify "ERC:" msg))
     (pal
      (let ((nick (car (split-string nick "!"))))
        (when (member nick erc-pals)
          (message (format "%s: %s" nick msg)))))))
 
 (add-hook 'erc-text-matched-hook 'erc-text-matched)
+
+(push "workgroups" erc-keywords)
+
+
+;;; erc buffer switching
 
 (defun switch-to-erc-buffer ()
   (interactive)
@@ -38,12 +59,21 @@
   (interactive)
   (next-erc-buffer t))
 
+
+;;; quit reason
+
+(setq erc-quit-reason-various-alist
+      '(("brb" "brb")))
+
 (defun thunk-quit-reason (&optional n)
   (nth (or n 0)
        '("thunk"
          "I'm using zxvg 1.11 with GNU Emacs \
 47b.1.70.3 (x512_128-statex-occuline37.2.0, \
 para-tty) of 2020.1573.28374.")))
+
+
+;;; set vars
 
 (setq erc-modules '(autojoin button completion fill irccontrols
                              list log match menu move-to-prompt

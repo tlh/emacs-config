@@ -11,7 +11,7 @@
 
 
 (defkeymap file-map
-  "C-c"              'file-cache-minibuffer-complete
+  "C-c"              'byte-compile-file
   "C-l"              'load-file
   "C-m"              'move-file-and-buffer
   "C-o"              'ido-find-file-other-window
@@ -116,7 +116,7 @@
 (defkeymap erc-map
   "C-b"              'switch-to-erc-buffer
   "C-S-b"            'erc-iswitchb
-  "C-c"              'erc-freenode-ssl-connect
+  "C-c"              'erc-freenode-connect
   "C-n"              'next-erc-buffer
   "C-p"              'prev-erc-buffer
   )
@@ -146,6 +146,8 @@
 (defkeymap org-map
   "C-a"              'org-agenda
   "C-l"              'org-store-link
+  "C-c"              'org-capture
+  "C-b"              'org-iswitchb
   )
 
 
@@ -199,9 +201,11 @@
   "C-p"              launch-map
   "C-u"              w3m-map
   "C-v"              emms-map
-  "C-x"              workgroups-map
+  "C-x"              wg-map
   "C-y"              yaoddmuse-map
   )
+
+;; (workgroups-set-prefix-key (kbd "C-z C-x"))
 
 
 ;;; fill-keymaps
@@ -258,11 +262,14 @@
              "C-m"              'ido-execute-extended-command
              "C-i"              'ido-imenu
              "7"                'ido-recalculate-all-caches
-             "C-b"              'ibuffer
+             ;; "C-b"              'ibuffer
+             "C-b"              'switch-to-buffer
+             "B"                'ibuffer
              "u"                'yell-at-me
              "C-e"              'yell-at-me
              "("                'yell-at-me
              ")"                'yell-at-me
+             "y"                'ido-yank
              ;; "C-c"              'save-buffers-kill-terminal
              )
 
@@ -300,25 +307,12 @@
              "M-_"              (cmd (dec-transparency 2))
              "M-+"              (cmd (inc-transparency 2))
              "C-x C-\\"         'goto-last-change
-             "C-\""             'delete-surrounding-whitespace
+             "C-M-S-k"          'delete-surrounding-whitespace
+             "C-M-S-i"          'info
 
              ;; Hyper
 
              "H-k"              'kill-whole-line
-
-             "H-0"              'workgroups-jump-0
-             "H-1"              'workgroups-jump-1
-             "H-2"              'workgroups-jump-2
-             "H-3"              'workgroups-jump-3
-             "H-4"              'workgroups-jump-4
-             "H-5"              'workgroups-jump-5
-             "H-6"              'workgroups-jump-6
-             "H-7"              'workgroups-jump-7
-             "H-8"              'workgroups-jump-8
-             "H-9"              'workgroups-jump-9
-
-             "H-r"              'workgroups-revert
-             "H-u"              'workgroups-update
 
 
              ;; quickkeys
@@ -327,10 +321,17 @@
              "C-M-2"            'eshell
              "C-M-3"            'jump-to-register
              "C-M-4"            (cmd (switch-to-buffer (help-buffer)))
-             "C-M-5"            'google-define
+             "C-M-5"            'new-temp-text-mode-buffer
+             "C-M-6"            'google-define
              "C-M-7"            'recs-load-pattern-file
              "C-M-8"            'refresh-frame
              "C-M-9"            (cmd (checkdoc-current-buffer t))
+
+
+             ;; C-c
+
+             "C-c o"            'occur
+             "C-c p"            'check-parens
 
 
              ;; buffers
@@ -338,7 +339,7 @@
              "C-H-h"            'previous-buffer
              "C-H-l"            'next-buffer
              "C-H-j"            'bury-buffer
-             "C-H-k"            (cmd (kill-buffer (current-buffer)))
+             "C-H-k"            'kill-this-buffer
 
 
              ;; windows
@@ -371,18 +372,11 @@
 
              ;; frames
 
-             "C-M-S-h"          (cmd (other-frame -1))
-             "C-M-S-l"          (cmd (other-frame  1))
-             "C-M-S-k"          'delete-frame
-             "C-M-S-m"          'make-frame
-             "C-M-S-r"          'refresh-frame
-
-
-             ;; workgroups
-
-             "C-H-s"            'workgroups-update
-             "C-H-,"            'workgroups-prev
-             "C-H-."            'workgroups-next
+             ;; "C-M-S-h"          (cmd (other-frame -1))
+             ;; "C-M-S-l"          (cmd (other-frame  1))
+             ;; "C-M-S-k"          'delete-frame
+             ;; "C-M-S-m"          'make-frame
+             ;; "C-M-S-r"          'refresh-frame
 
 
              ;; moving point
@@ -404,6 +398,39 @@
              "C-M-S-t"          'backward-transpose-sexps
              "M-p"              'transpose-paragraphs
              "M-P"              'backward-transpose-paragraphs
+
+
+             ;; workgroups
+
+             "H-r"              'wg-revert-workgroup
+             "H-R"              'wg-revert-all-workgroups
+             "H-u"              'wg-update-workgroup
+             "H-U"              'wg-update-all-workgroups
+             "C-H-,"            'wg-switch-left
+             "C-H-."            'wg-switch-right
+             "C-H-<"            'wg-switch-left-other-frame
+             "C-H->"            'wg-switch-right-other-frame
+             "H-["              'wg-undo-wconfig-change
+             "H-]"              'wg-redo-wconfig-change
+             "H-,"              'wg-offset-left
+             "H-."              'wg-offset-right
+             "H-0"              'wg-switch-to-index-0
+             "H-1"              'wg-switch-to-index-1
+             "H-2"              'wg-switch-to-index-2
+             "H-3"              'wg-switch-to-index-3
+             "H-4"              'wg-switch-to-index-4
+             "H-5"              'wg-switch-to-index-5
+             "H-6"              'wg-switch-to-index-6
+             "H-7"              'wg-switch-to-index-7
+             "H-8"              'wg-switch-to-index-8
+             "H-9"              'wg-switch-to-index-9
+             "H-<left>"         'wg-dec-morph-hsteps
+             "H-<right>"        'wg-inc-morph-hsteps
+             "H-<down>"         'wg-dec-morph-vsteps
+             "H-<up>"           'wg-inc-morph-vsteps
+             "H-\\"             'wg-reverse-frame-horizontally
+             "H--"              'wg-reverse-frame-vertically
+             "H-="              'wg-reverse-frame-horizontally-and-vertically
 
 
              ;; fn keys
@@ -429,7 +456,7 @@
              "M-<f5>"           'ucs-insert
              "M-<f7>"           'emms-slider-seek
              "M-<f9>"           'emms-slider-seek
-             "M-<f12>"          'workgroups-echo-time
+             "M-<f12>"          'wg-echo-time
              "C-M-<f7>"         'emms-display-track-position-slider
              "C-M-<f9>"         'emms-display-track-position-slider
              "C-M-<f1>"         'view-emacs-FAQ

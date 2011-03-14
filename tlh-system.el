@@ -1,6 +1,7 @@
 ;;; system specific
 
-;; window-system
+
+;;; window-system
 
 (when window-system
   (menu-bar-mode      -1)
@@ -10,26 +11,31 @@
   (blink-cursor-mode  -1)
   (mouse-wheel-mode    t))
 
-;; system-type
+
+;;; system-type
 
 (case system-type
   ((gnu/linux linux)
-   nil)
+   (require 'tlh-linux))
   (darwin
    (require 'tlh-osx)))
 
-;; system-name
+
+;;; system-name
 
 (case system-name
   ("bine.local" nil))
 
-;; user
+
+;;; user
 
 (case user-login-name
   ("luke" nil))
 
-;; provide
+
+;;; provide
 
 (provide 'tlh-system)
+
 
 ;;; tlh-system.el ends here
